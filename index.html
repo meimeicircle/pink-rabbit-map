@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>粉粉兔看房地圖 | 買房 PK 神器</title>
+  <meta name="description" content="粉粉兔幫你看建案！提供建案 PK 系統、捷運地圖模式、真實評價分析，讓買房不再霧煞煞。首購族與投資客的看房必備工具。">
+  
+  <!-- Social Media Meta Tags -->
+  <meta property="og:title" content="粉粉兔看房地圖 | 買房 PK 神器">
+  <meta property="og:description" content="可愛又實用的看房地圖，一眼看出建案優缺點，還有 PK 擂台幫你選出命定好房！🐰">
+  <meta property="og:image" content="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Rabbit%20face/3D/rabbit_face_3d.png">
+  <meta property="og:type" content="website">
+  
+  <!-- Rabbit Favicon (PNG) - Microsoft Fluent 3D Emoji -->
+  <link rel="icon" type="image/png" sizes="192x192" href="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Rabbit%20face/3D/rabbit_face_3d.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Rabbit%20face/3D/rabbit_face_3d.png">
+  <link rel="apple-touch-icon" href="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Rabbit%20face/3D/rabbit_face_3d.png">
+  
+  <!-- PWA Manifest will be injected dynamically by App.tsx -->
+  <!-- <link rel="manifest" href="/manifest.json"> -->
+  
+  <meta name="theme-color" content="#fff0f5">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  
+  <!-- Google Fonts: Noto Sans TC + Nunito (Rounded) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Nunito:wght@800;1000&display=swap" rel="stylesheet" crossorigin="anonymous">
+
+  <!-- Tailwind CSS CDN (Rescue Mission for Styling!) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Noto Sans TC', 'sans-serif'],
+            rounded: ['Nunito', 'sans-serif'],
+          },
+          colors: {
+            pink: {
+              50: '#fff0f5', 
+              100: '#fce7f3',
+              200: '#fbcfe8',
+              300: '#f9a8d4',
+              400: '#f472b6',
+              500: '#ec4899',
+              600: '#db2777',
+            },
+            // Forest / Morandi Palette (Restored)
+            night: {
+              900: '#2F3832', // --bg-page (Deep Forest Green)
+              800: '#E6DEDC', // --bg-card (Warm Greige / Sand) - User Request
+              700: '#CFC5C2', // --bg-card-active (Darker Greige)
+              600: '#728A7A', // --tag-bg (Sage Green) - User Request
+              400: '#7D7975', // --text-disabled
+              300: '#5C5855', // --text-muted
+              200: '#2A2628', // --text-main (Dark text for light cards)
+              100: '#F0F0F0', // --text-primary (Light text for dark backgrounds)
+              pink: {
+                primary: '#728A7A',   // --pink-primary (Sage Green)
+                secondary: '#5E7164', // --pink-secondary (Darker Sage)
+              }
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="/index.css">
+  
+<script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "vite": "https://esm.sh/vite@^7.3.0",
+    "html2canvas": "https://esm.sh/html2canvas@^1.4.1",
+    "leaflet": "https://esm.sh/leaflet@^1.9.4",
+    "react-leaflet": "https://esm.sh/react-leaflet@^5.0.0"
+  }
+}
+</script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
