@@ -288,18 +288,28 @@ const ProjectDrawer: React.FC<ProjectDrawerProps> = ({
                          {style.label} {project.verdict === RabbitVerdict.RECOMMEND ? <FluentEmoji emoji="💖" size={16}/> : ''}
                       </span>
                    </div>
-                   <h2 className={`text-[28px] font-bold leading-tight mb-2 mt-1 ${drawerTextMain}`}>
-                     <TextWithFluentEmojis text={project.name} emojiSize={24} />
-                   </h2>
-                   
-                   {/* 網友投稿徽章 - Submitter Badge */}
-                   {project.submitter && (
-                      <div className="relative mt-1 mb-2 inline-flex items-center gap-2 bg-yellow-50 text-yellow-700 px-3 py-1.5 rounded-full text-xs font-bold border border-yellow-200 shadow-sm animate-in fade-in slide-in-from-left-4 duration-500">
-                        <div className="relative flex items-center justify-center bg-white rounded-full w-5 h-5 shadow-sm border border-yellow-100">
-                           <FluentEmoji emoji={project.submitter.emoji} size={14} />
+                   <div className="flex flex-wrap items-center gap-3 mb-2 mt-1">
+                     <h2 className={`text-[28px] font-bold leading-tight ${drawerTextMain}`}>
+                       <TextWithFluentEmojis text={project.name} emojiSize={24} />
+                     </h2>
+                     
+                     {/* 網友投稿徽章 - Submitter Badge */}
+                     {project.submitter && (
+                        <div className="relative inline-flex items-center gap-2 bg-yellow-50 text-yellow-700 px-3 py-1.5 rounded-full text-sm font-bold border border-yellow-200 shadow-sm animate-in fade-in slide-in-from-left-4 duration-500">
+                          <div className="relative flex items-center justify-center bg-white rounded-full w-6 h-6 shadow-sm border border-yellow-100">
+                             <FluentEmoji emoji={project.submitter.emoji} size={18} />
+                          </div>
+                          <span>感謝 {project.submitter.name} 投稿回報</span>
                         </div>
-                        <span>感謝 {project.submitter.name} 投稿回報</span>
-                      </div>
+                     )}
+                   </div>
+                   
+                   {/* 網友投稿警語 */}
+                   {project.submitter && (
+                     <div className="text-xs text-stone-500 bg-stone-50 p-2 rounded-lg border border-stone-100 mb-3 flex items-start gap-1.5">
+                       <span className="shrink-0 mt-0.5"><FluentEmoji emoji="🐰" size={14} /></span>
+                       <span>此為網友熱心投稿，粉粉兔協助評分，如果忙中有誤請務必告知，一起呈現正確資訊給大家</span>
+                     </div>
                    )}
 
                    <div className={`flex flex-wrap items-center gap-3 text-sm md:text-base font-medium ${themeColor === 'dark' ? 'text-night-300' : 'text-[#7A6E6A]'}`}>

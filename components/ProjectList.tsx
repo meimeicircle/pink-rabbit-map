@@ -94,20 +94,22 @@ const ProjectList: React.FC<ProjectListProps> = ({
                 
                 {/* Header: Name & Region */}
                 <div>
-                  <h3 className={`text-xl font-black leading-tight mb-1 truncate ${themeColor === 'dark' ? 'text-night-200' : 'text-stone-800'}`}>
-                    <TextWithFluentEmojis text={project.name} emojiSize={20} />
-                  </h3>
+                  <div className="flex flex-wrap items-center gap-2 mb-1">
+                    <h3 className={`text-xl font-black leading-tight truncate ${themeColor === 'dark' ? 'text-night-200' : 'text-stone-800'}`}>
+                      <TextWithFluentEmojis text={project.name} emojiSize={20} />
+                    </h3>
+                    {project.submitter && (
+                       <div className={`relative flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold ${themeColor === 'dark' ? 'bg-night-700 text-yellow-500 border-night-600' : 'bg-yellow-50 text-yellow-700 border-yellow-100'} border shadow-sm shrink-0`}>
+                          <FluentEmoji emoji={project.submitter.emoji} size={12} />
+                          <span>{project.submitter.name} 投稿</span>
+                       </div>
+                    )}
+                  </div>
                   <div className="flex items-center text-xs text-stone-500 font-bold gap-2">
                      <div className="flex items-center">
                         <MapPin size={12} className={`mr-0.5 ${themeColor === 'pink' ? 'text-pink-500' : themeColor === 'sky' ? 'text-sky-500' : 'text-night-pink-primary'}`} fill="currentColor" />
                         <span className={themeColor === 'dark' ? 'text-night-300' : ''}>{project.region}</span>
                      </div>
-                     {project.submitter && (
-                        <div className={`relative flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] ${themeColor === 'dark' ? 'bg-night-700 text-night-pink-primary border-night-600' : 'bg-yellow-50 text-yellow-700 border-yellow-100'} border shadow-sm`}>
-                           <FluentEmoji emoji={project.submitter.emoji} size={10} />
-                           <span>{project.submitter.name} 投稿</span>
-                        </div>
-                     )}
                   </div>
                 </div>
 
