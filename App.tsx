@@ -74,60 +74,6 @@ const App: React.FC = () => {
     floorHeightMin: ''
   });
 
-  // 🐰 Favicon & Manifest Generator
-  useEffect(() => {
-    const updateIcon = async () => {
-      try {
-        const userAgent = window.navigator.userAgent.toLowerCase();
-        const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
-        const appIconUrl = isMobile ? ICON_MOBILE_APP : ICON_DESKTOP_APP;
-        const webIconUrl = isMobile ? ICON_MOBILE_WEB : ICON_DESKTOP_WEB;
-
-        const links = document.querySelectorAll("link[rel*='icon']");
-        links.forEach((link: any) => { link.href = webIconUrl; });
-
-        let manifestElement = document.querySelector("link[rel='manifest']");
-        if (!manifestElement) {
-          manifestElement = document.createElement('link');
-          manifestElement.setAttribute('rel', 'manifest');
-          document.head.appendChild(manifestElement);
-        }
-
-        const manifest = {
-          name: "粉粉兔看房地圖",
-          short_name: "粉粉兔",
-          description: "可愛又實用的看房地圖，幫你 PK 建案！",
-          start_url: window.location.origin + "/",
-          display: "standalone",
-          background_color: "#ffffff",
-          theme_color: "#fff0f5",
-          orientation: "portrait",
-          icons: [
-            {
-              src: new URL(appIconUrl, window.location.href).href,
-              sizes: "192x192",
-              type: "image/png",
-              purpose: "any maskable"
-            },
-            {
-              src: new URL(appIconUrl, window.location.href).href,
-              sizes: "512x512",
-              type: "image/png",
-              purpose: "any maskable"
-            }
-          ]
-        };
-        const stringManifest = JSON.stringify(manifest);
-        const blob = new Blob([stringManifest], {type: 'application/json'});
-        const manifestURL = URL.createObjectURL(blob);
-        manifestElement.setAttribute('href', manifestURL);
-      } catch (e) {
-        console.error("Failed to generate setting icons", e);
-      }
-    };
-    updateIcon();
-  }, []);
-
   // Initial Fetch
   useEffect(() => {
     const init = async () => {
