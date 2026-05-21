@@ -151,8 +151,8 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
 
   const renderSellingPointTags = (text: string) => {
     if (!text) return '-';
-    // 修正：要求數字後面必須有點和空白 (例如 "1. ") 才進行切割，避免切斷小數點
-    const items = text.split(/(?:\d+\.\s|[、；;\n]+)/).map(s => s.trim()).filter(s => s.length > 0);
+    // 修正：支援 "1. " 或 "1) " 以及換行符號切割
+    const items = text.split(/(?:\d+[\.\)]\s*|[、；;\n]+)/).map(s => s.trim()).filter(s => s.length > 0);
     if (items.length === 0) return '-';
     return (
       <div className="flex flex-wrap gap-1.5 items-start content-start tag-container">

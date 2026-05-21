@@ -194,37 +194,6 @@ const GuideModal: React.FC<GuideModalProps> = ({ isOpen, onClose, themeColor }) 
               ))}
            </div>
 
-           {/* 3. BOTTOM SECTION: Scorer Intro & Standalone Link */}
-           <div className={`rounded-2xl p-5 border-2 ${commonCardStyle} ${themeColor === 'pink' ? 'text-pink-600' : themeColor === 'sky' ? 'text-sky-600' : 'text-night-pink-primary'}`}>
-              <div className="flex items-center gap-2 mb-3 font-bold text-lg">
-                  <Calculator size={20} />
-                  <span>粉粉兔偽客觀評分器</span>
-              </div>
-              
-              <div className={`text-xs text-stone-600 leading-relaxed mb-4`}>
-                 參考 <span className={`font-bold text-stone-700`}>300+ 筆預售屋評比資料</span> + <span className={`font-bold text-stone-700`}>建材等級加權</span> + <span className={`font-bold text-stone-700`}>基準分</span> = 只有粉粉兔才有的標準<FluentEmoji emoji="🐰" size={14} />
-              </div>
-
-              <div className={`bg-white border-stone-200 rounded-xl p-4 border`}>
-                <p className={`mb-3 font-bold text-sm text-center ${themeColor === 'pink' ? 'text-pink-600' : themeColor === 'sky' ? 'text-sky-600' : 'text-night-pink-primary'}`}>
-                   已經明確知道自己想要什麼案子？
-                </p>
-                <a 
-                  href={STANDALONE_SCORER_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={`w-full flex items-center justify-center gap-2 border py-3 rounded-xl font-bold transition-colors shadow-sm active:scale-95 ${themeColor === 'pink' ? 'bg-pink-50 hover:bg-pink-100 text-pink-600 border-pink-200' : themeColor === 'sky' ? 'bg-sky-50 hover:bg-sky-100 text-sky-600 border-sky-200' : 'bg-night-pink-primary/10 hover:bg-night-pink-primary/20 text-night-pink-primary border-night-pink-primary/30'}`}
-                >
-                  <Gamepad2 size={18} />
-                  <span>直接玩評分器獨立版</span>
-                  <ExternalLink size={14} className="opacity-50"/>
-                </a>
-                <p className={`text-[10px] ${textMutedLight} mt-2 text-center`}>
-                  (支援一次篩選多種條件標籤跟區域喔！)
-                </p>
-              </div>
-           </div>
-
            <div className="mt-2 text-center">
               <button 
                 onClick={onClose}

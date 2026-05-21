@@ -12,7 +12,7 @@ import AskRabbitModal from './components/AskRabbitModal';
 import GuideModal from './components/GuideModal';
 import SubmitProjectModal from './components/SubmitProjectModal';
 import InstallPwaPrompt from './components/InstallPwaPrompt';
-import { APP_TITLE, RABBIT_AVATAR_URL, SUNGLASSES_URL, MAP_3D_URL } from './constants';
+import { APP_TITLE, RABBIT_AVATAR_URL, SUNGLASSES_URL, MAP_3D_URL, ICON_DESKTOP_APP, ICON_MOBILE_APP, ICON_DESKTOP_WEB, ICON_MOBILE_WEB } from './constants';
 import { FluentEmoji, TextWithFluentEmojis } from './utils/fluentEmoji';
 
 export type ThemeColor = 'pink' | 'sky' | 'dark';
@@ -20,6 +20,8 @@ export type ThemeColor = 'pink' | 'sky' | 'dark';
 // Region Keywords Constants
 const NTP_KEYWORDS = ['新北', '板橋', '三重', '中和', '永和', '新莊', '土城', '蘆洲', '汐止', '樹林', '鶯歌', '三峽', '淡水', '林口', '泰山', '五股', '八里', '深坑', '新店'];
 const TY_KEYWORDS = ['桃園', '中壢', '平鎮', '八德', '楊梅', '蘆竹', '南崁', '大園', '龜山', '龍潭', '觀音', '新屋', '青埔', '大溪', '內壢', 'A7', 'A8', 'A9', 'A10', 'A17', 'A18', 'A19', 'A20'];
+const KLU_KEYWORDS = ['基隆', '七堵', '八堵', '暖暖', '安樂', '信義', '仁愛', '中正', '中山'];
+const HC_KEYWORDS = ['新竹', '竹北', '湖口', '新豐', '新埔', '關西', '芎林', '寶山', '竹東', '五峰', '橫山', '北埔', '峨眉'];
 const ILA_KEYWORDS = ['宜蘭', '羅東', '礁溪', '頭城'];
 
 const App: React.FC = () => {
@@ -72,69 +74,48 @@ const App: React.FC = () => {
     floorHeightMin: ''
   });
 
-  // 🐰 Favicon & Manifest Generator (Rabbit + Map Composite Icon)
+  // 🐰 Favicon & Manifest Generator
   useEffect(() => {
     const updateIcon = async () => {
       try {
-        const rabbitImg = new Image();
-        rabbitImg.crossOrigin = 'Anonymous';
-        rabbitImg.src = RABBIT_AVATAR_URL;
+        const isMobile = window.innerWidth < 768;
+        const appIconUrl = isMobile ? ICON_MOBILE_APP : ICON_DESKTOP_APP;
+        const webIconUrl = isMobile ? ICON_MOBILE_WEB : ICON_DESKTOP_WEB;
 
-        const mapImg = new Image();
-        mapImg.crossOrigin = 'Anonymous';
-        mapImg.src = MAP_3D_URL;
+        const links = document.querySelectorAll("link[rel*='icon']");
+        links.forEach((link: any) => { link.href = webIconUrl; });
 
-        await Promise.all([
-          new Promise(resolve => { rabbitImg.onload = resolve; }),
-          new Promise(resolve => { mapImg.onload = resolve; })
-        ]);
-
-        const canvas = document.createElement('canvas');
-        canvas.width = 512;
-        canvas.height = 512;
-        const ctx = canvas.getContext('2d');
-        if (ctx) {
-          ctx.fillStyle = '#ffffff';
-          ctx.fillRect(0, 0, 512, 512);
-          ctx.drawImage(mapImg, 512/2 - 180, 512 - 320, 360, 360);
-          ctx.drawImage(rabbitImg, 512/2 - 150, 20, 300, 300);
-          const iconUrl = canvas.toDataURL('image/png');
-
-          const links = document.querySelectorAll("link[rel*='icon']");
-          links.forEach((link: any) => { link.href = iconUrl; });
-
-          let manifestElement = document.querySelector("link[rel='manifest']");
-          if (!manifestElement) {
-            manifestElement = document.createElement('link');
-            manifestElement.setAttribute('rel', 'manifest');
-            document.head.appendChild(manifestElement);
-          }
-
-          const manifest = {
-            name: "粉粉兔看房地圖",
-            short_name: "粉粉兔",
-            description: "可愛又實用的看房地圖，幫你 PK 建案！",
-            start_url: "/",
-            display: "standalone",
-            background_color: "#ffffff",
-            theme_color: "#fff0f5",
-            orientation: "portrait",
-            icons: [
-              {
-                src: iconUrl,
-                sizes: "512x512",
-                type: "image/png",
-                purpose: "any maskable"
-              }
-            ]
-          };
-          const stringManifest = JSON.stringify(manifest);
-          const blob = new Blob([stringManifest], {type: 'application/json'});
-          const manifestURL = URL.createObjectURL(blob);
-          manifestElement.setAttribute('href', manifestURL);
+        let manifestElement = document.querySelector("link[rel='manifest']");
+        if (!manifestElement) {
+          manifestElement = document.createElement('link');
+          manifestElement.setAttribute('rel', 'manifest');
+          document.head.appendChild(manifestElement);
         }
+
+        const manifest = {
+          name: "粉粉兔看房地圖",
+          short_name: "粉粉兔",
+          description: "可愛又實用的看房地圖，幫你 PK 建案！",
+          start_url: "/",
+          display: "standalone",
+          background_color: "#ffffff",
+          theme_color: "#fff0f5",
+          orientation: "portrait",
+          icons: [
+            {
+              src: appIconUrl,
+              sizes: "512x512",
+              type: "image/png",
+              purpose: "any maskable"
+            }
+          ]
+        };
+        const stringManifest = JSON.stringify(manifest);
+        const blob = new Blob([stringManifest], {type: 'application/json'});
+        const manifestURL = URL.createObjectURL(blob);
+        manifestElement.setAttribute('href', manifestURL);
       } catch (e) {
-        console.error("Failed to generate composite icon", e);
+        console.error("Failed to generate setting icons", e);
       }
     };
     updateIcon();
@@ -182,6 +163,8 @@ const App: React.FC = () => {
     const groups: Record<string, string[]> = {
       '新北市': [],
       '桃園市': [],
+      '新竹縣市': [],
+      '基隆市': [],
       '宜蘭縣': [],
       '其他': []
     };
@@ -195,6 +178,12 @@ const App: React.FC = () => {
         isMatched = true;
       } else if (TY_KEYWORDS.some(k => region.includes(k))) {
         groups['桃園市'].push(region);
+        isMatched = true;
+      } else if (HC_KEYWORDS.some(k => region.includes(k))) {
+        groups['新竹縣市'].push(region);
+        isMatched = true;
+      } else if (KLU_KEYWORDS.some(k => region.includes(k))) {
+        groups['基隆市'].push(region);
         isMatched = true;
       } else if (ILA_KEYWORDS.some(k => region.includes(k))) {
         groups['宜蘭縣'].push(region);
@@ -403,6 +392,8 @@ const App: React.FC = () => {
      let mapKey = '';
      if (welcomeCityKey === 'NTP') mapKey = '新北市';
      else if (welcomeCityKey === 'TY') mapKey = '桃園市';
+     else if (welcomeCityKey === 'HC') mapKey = '新竹縣市';
+     else if (welcomeCityKey === 'KLU') mapKey = '基隆市';
      else if (welcomeCityKey === 'ILA') mapKey = '宜蘭縣';
      else if (welcomeCityKey === 'OTHER') mapKey = '其他';
      
@@ -469,8 +460,10 @@ const App: React.FC = () => {
 
   const ntpCount = useMemo(() => allProjects.filter(p => NTP_KEYWORDS.some(k => p.region.includes(k))).length, [allProjects]);
   const tyCount = useMemo(() => allProjects.filter(p => TY_KEYWORDS.some(k => p.region.includes(k))).length, [allProjects]);
+  const hcCount = useMemo(() => allProjects.filter(p => HC_KEYWORDS.some(k => p.region.includes(k))).length, [allProjects]);
+  const kluCount = useMemo(() => allProjects.filter(p => KLU_KEYWORDS.some(k => p.region.includes(k))).length, [allProjects]);
   const ilaCount = useMemo(() => allProjects.filter(p => ILA_KEYWORDS.some(k => p.region.includes(k))).length, [allProjects]);
-  const otherCount = useMemo(() => allProjects.length - ntpCount - tyCount - ilaCount, [allProjects, ntpCount, tyCount, ilaCount]);
+  const otherCount = useMemo(() => allProjects.length - ntpCount - tyCount - hcCount - kluCount - ilaCount, [allProjects, ntpCount, tyCount, hcCount, kluCount, ilaCount]);
 
   const mainContainerClass = theme === 'pink' ? 'bg-[#FFEFF6]' : theme === 'sky' ? 'bg-[#F0F9FF]' : 'bg-night-900';
   const sidebarClass = theme === 'pink' ? 'bg-[#FFEFF6] border-pink-100' : theme === 'sky' ? 'bg-[#F0F9FF] border-sky-100' : 'bg-night-900 border-white/10';
@@ -479,10 +472,13 @@ const App: React.FC = () => {
   const hasAdvancedFilters = !!filters.publicRatioMax || !!filters.totalUnitsMin || !!filters.totalUnitsMax || !!filters.baseAreaMin || !!filters.baseAreaMax || !!filters.managementFeeMax || !!filters.floorHeightMin;
 
   const sidebarTabs = useMemo(() => {
-    const tabs = ['新北市', '桃園市', '宜蘭縣'];
+    const tabs = ['新北市', '桃園市'];
+    if (hcCount > 0) tabs.push('新竹縣市');
+    if (kluCount > 0) tabs.push('基隆市');
+    tabs.push('宜蘭縣');
     if (otherCount > 0) tabs.push('其他');
     return tabs;
-  }, [otherCount]);
+  }, [hcCount, kluCount, otherCount]);
 
   return (
     <div className={`h-[100dvh] flex flex-col text-[#5A463D] overflow-hidden relative ${mainContainerClass} transition-colors duration-500`}>
@@ -512,38 +508,58 @@ const App: React.FC = () => {
                <p className={`font-bold mb-8 text-center ${theme === 'dark' ? 'text-night-200' : 'text-[#7A6E6A]'}`}>
                  <TextWithFluentEmojis text="請先選擇您想探索的縣市 🐰" />
                </p>
-               <div className="grid grid-cols-1 gap-4 w-full">
-                  <button onClick={() => handleWelcomeSelectCity('NTP')} className={`${theme === 'dark' ? 'bg-night-800 border-night-700 hover:bg-night-700' : 'bg-white hover:bg-pink-50 border-pink-100'} border-4 p-4 rounded-3xl flex items-center justify-between shadow-sm transition-all hover:scale-105 active:scale-95 group`}>
-                     <div className="flex items-center gap-3">
-                        <div className={`${theme === 'dark' ? 'bg-night-600 text-white' : 'bg-pink-100 text-pink-500 group-hover:bg-pink-500 group-hover:text-white'} p-2.5 rounded-full font-bold transition-colors`}>N</div>
-                        <span className={`font-bold text-lg ${theme === 'dark' ? 'text-night-200' : 'text-[#5A463D]'}`}>新北市</span>
+               <div className="grid grid-cols-2 gap-3 w-full">
+                  <button onClick={() => handleWelcomeSelectCity('NTP')} className={`${theme === 'dark' ? 'bg-night-800 border-night-700 hover:bg-night-700' : 'bg-white hover:bg-pink-50 border-pink-100'} border-[3px] p-3 py-4 rounded-2xl flex flex-col items-center justify-center gap-2.5 shadow-sm transition-all hover:scale-105 active:scale-95 group`}>
+                     <div className="flex items-center gap-2">
+                        <div className={`${theme === 'dark' ? 'bg-night-600 text-white' : 'bg-pink-100 text-pink-500 group-hover:bg-pink-500 group-hover:text-white'} w-8 h-8 flex items-center justify-center rounded-full font-bold text-sm transition-colors`}>N</div>
+                        <span className={`font-bold text-[15px] ${theme === 'dark' ? 'text-night-200' : 'text-[#5A463D]'}`}>新北市</span>
                      </div>
-                     <span className={`${theme === 'dark' ? 'bg-night-700 text-night-300' : 'bg-stone-100 text-stone-400'} px-3 py-1 rounded-full text-xs font-bold`}>{ntpCount} 案</span>
+                     <span className={`${theme === 'dark' ? 'bg-night-700 text-night-300' : 'bg-stone-100 text-stone-500'} px-3 py-1 rounded-full text-[10px] tracking-widest font-bold`}>{ntpCount} 案</span>
                   </button>
                   
-                  <button onClick={() => handleWelcomeSelectCity('TY')} className={`${theme === 'dark' ? 'bg-night-800 border-night-700 hover:bg-night-700' : 'bg-white hover:bg-green-50 border-green-100'} border-4 p-4 rounded-3xl flex items-center justify-between shadow-sm transition-all hover:scale-105 active:scale-95 group`}>
-                     <div className="flex items-center gap-3">
-                        <div className={`${theme === 'dark' ? 'bg-night-600 text-white' : 'bg-green-100 text-green-500 group-hover:bg-green-500 group-hover:text-white'} p-2.5 rounded-full font-bold transition-colors`}>T</div>
-                        <span className={`font-bold text-lg ${theme === 'dark' ? 'text-night-200' : 'text-[#5A463D]'}`}>桃園市</span>
+                  <button onClick={() => handleWelcomeSelectCity('TY')} className={`${theme === 'dark' ? 'bg-night-800 border-night-700 hover:bg-night-700' : 'bg-white hover:bg-green-50 border-green-100'} border-[3px] p-3 py-4 rounded-2xl flex flex-col items-center justify-center gap-2.5 shadow-sm transition-all hover:scale-105 active:scale-95 group`}>
+                     <div className="flex items-center gap-2">
+                        <div className={`${theme === 'dark' ? 'bg-night-600 text-white' : 'bg-green-100 text-green-500 group-hover:bg-green-500 group-hover:text-white'} w-8 h-8 flex items-center justify-center rounded-full font-bold text-sm transition-colors`}>T</div>
+                        <span className={`font-bold text-[15px] ${theme === 'dark' ? 'text-night-200' : 'text-[#5A463D]'}`}>桃園市</span>
                      </div>
-                     <span className={`${theme === 'dark' ? 'bg-night-700 text-night-300' : 'bg-stone-100 text-stone-400'} px-3 py-1 rounded-full text-xs font-bold`}>{tyCount} 案</span>
+                     <span className={`${theme === 'dark' ? 'bg-night-700 text-night-300' : 'bg-stone-100 text-stone-500'} px-3 py-1 rounded-full text-[10px] tracking-widest font-bold`}>{tyCount} 案</span>
                   </button>
+
+                  {hcCount > 0 && (
+                    <button onClick={() => handleWelcomeSelectCity('HC')} className={`${theme === 'dark' ? 'bg-night-800 border-night-700 hover:bg-night-700' : 'bg-white hover:bg-blue-50 border-blue-100'} border-[3px] p-3 py-4 rounded-2xl flex flex-col items-center justify-center gap-2.5 shadow-sm transition-all hover:scale-105 active:scale-95 group`}>
+                       <div className="flex items-center gap-2">
+                          <div className={`${theme === 'dark' ? 'bg-night-600 text-white' : 'bg-blue-100 text-blue-500 group-hover:bg-blue-500 group-hover:text-white'} w-8 h-8 flex items-center justify-center rounded-full font-bold text-sm transition-colors`}>H</div>
+                          <span className={`font-bold text-[15px] ${theme === 'dark' ? 'text-night-200' : 'text-[#5A463D]'}`}>新竹縣市</span>
+                       </div>
+                       <span className={`${theme === 'dark' ? 'bg-night-700 text-night-300' : 'bg-stone-100 text-stone-500'} px-3 py-1 rounded-full text-[10px] tracking-widest font-bold`}>{hcCount} 案</span>
+                    </button>
+                  )}
+
+                  {kluCount > 0 && (
+                    <button onClick={() => handleWelcomeSelectCity('KLU')} className={`${theme === 'dark' ? 'bg-night-800 border-night-700 hover:bg-night-700' : 'bg-white hover:bg-indigo-50 border-indigo-100'} border-[3px] p-3 py-4 rounded-2xl flex flex-col items-center justify-center gap-2.5 shadow-sm transition-all hover:scale-105 active:scale-95 group`}>
+                       <div className="flex items-center gap-2">
+                          <div className={`${theme === 'dark' ? 'bg-night-600 text-white' : 'bg-indigo-100 text-indigo-500 group-hover:bg-indigo-500 group-hover:text-white'} w-8 h-8 flex items-center justify-center rounded-full font-bold text-sm transition-colors`}>K</div>
+                          <span className={`font-bold text-[15px] ${theme === 'dark' ? 'text-night-200' : 'text-[#5A463D]'}`}>基隆市</span>
+                       </div>
+                       <span className={`${theme === 'dark' ? 'bg-night-700 text-night-300' : 'bg-stone-100 text-stone-500'} px-3 py-1 rounded-full text-[10px] tracking-widest font-bold`}>{kluCount} 案</span>
+                    </button>
+                  )}
                   
-                  <button onClick={() => handleWelcomeSelectCity('ILA')} className={`${theme === 'dark' ? 'bg-night-800 border-night-700 hover:bg-night-700' : 'bg-white hover:bg-orange-50 border-orange-100'} border-4 p-4 rounded-3xl flex items-center justify-between shadow-sm transition-all hover:scale-105 active:scale-95 group`}>
-                     <div className="flex items-center gap-3">
-                        <div className={`${theme === 'dark' ? 'bg-night-600 text-white' : 'bg-orange-100 text-orange-500 group-hover:bg-orange-500 group-hover:text-white'} p-2.5 rounded-full font-bold transition-colors`}>Y</div>
-                        <span className={`font-bold text-lg ${theme === 'dark' ? 'text-night-200' : 'text-[#5A463D]'}`}>宜蘭縣</span>
+                  <button onClick={() => handleWelcomeSelectCity('ILA')} className={`${theme === 'dark' ? 'bg-night-800 border-night-700 hover:bg-night-700' : 'bg-white hover:bg-orange-50 border-orange-100'} border-[3px] p-3 py-4 rounded-2xl flex flex-col items-center justify-center gap-2.5 shadow-sm transition-all hover:scale-105 active:scale-95 group`}>
+                     <div className="flex items-center gap-2">
+                        <div className={`${theme === 'dark' ? 'bg-night-600 text-white' : 'bg-orange-100 text-orange-500 group-hover:bg-orange-500 group-hover:text-white'} w-8 h-8 flex items-center justify-center rounded-full font-bold text-sm transition-colors`}>Y</div>
+                        <span className={`font-bold text-[15px] ${theme === 'dark' ? 'text-night-200' : 'text-[#5A463D]'}`}>宜蘭縣</span>
                      </div>
-                     <span className={`${theme === 'dark' ? 'bg-night-700 text-night-300' : 'bg-stone-100 text-stone-400'} px-3 py-1 rounded-full text-xs font-bold`}>{ilaCount} 案</span>
+                     <span className={`${theme === 'dark' ? 'bg-night-700 text-night-300' : 'bg-stone-100 text-stone-500'} px-3 py-1 rounded-full text-[10px] tracking-widest font-bold`}>{ilaCount} 案</span>
                   </button>
 
                   {otherCount > 0 && (
-                    <button onClick={() => handleWelcomeSelectCity('OTHER')} className={`${theme === 'dark' ? 'bg-night-800 border-night-700 hover:bg-night-700' : 'bg-white hover:bg-stone-50 border-stone-100'} border-4 p-4 rounded-3xl flex items-center justify-between shadow-sm transition-all hover:scale-105 active:scale-95 group`}>
-                       <div className="flex items-center gap-3">
-                          <div className={`${theme === 'dark' ? 'bg-night-600 text-white' : 'bg-stone-100 text-stone-500 group-hover:bg-stone-500 group-hover:text-white'} p-2.5 rounded-full font-bold transition-colors`}>O</div>
-                          <span className={`font-bold text-lg ${theme === 'dark' ? 'text-night-200' : 'text-[#5A463D]'}`}>其他縣市</span>
+                    <button onClick={() => handleWelcomeSelectCity('OTHER')} className={`${theme === 'dark' ? 'bg-night-800 border-night-700 hover:bg-night-700' : 'bg-white hover:bg-stone-50 border-stone-100'} border-[3px] p-3 py-4 rounded-2xl flex flex-col items-center justify-center gap-2.5 shadow-sm transition-all hover:scale-105 active:scale-95 group`}>
+                       <div className="flex items-center gap-2">
+                          <div className={`${theme === 'dark' ? 'bg-night-600 text-white' : 'bg-stone-100 text-stone-500 group-hover:bg-stone-500 group-hover:text-white'} w-8 h-8 flex items-center justify-center rounded-full font-bold text-sm transition-colors`}>O</div>
+                          <span className={`font-bold text-[15px] ${theme === 'dark' ? 'text-night-200' : 'text-[#5A463D]'}`}>其他縣市</span>
                        </div>
-                       <span className={`${theme === 'dark' ? 'bg-night-700 text-night-300' : 'bg-stone-100 text-stone-400'} px-3 py-1 rounded-full text-xs font-bold`}>{otherCount} 案</span>
+                       <span className={`${theme === 'dark' ? 'bg-night-700 text-night-300' : 'bg-stone-100 text-stone-500'} px-3 py-1 rounded-full text-[10px] tracking-widest font-bold`}>{otherCount} 案</span>
                     </button>
                   )}
 
@@ -681,11 +697,12 @@ const App: React.FC = () => {
 
       <header className={`${theme === 'dark' ? 'bg-night-800 border-night-700' : 'bg-white border-b-4'} shadow-sm px-4 md:px-6 py-3 z-20 flex items-center justify-between gap-4 border-b-4 ${theme === 'pink' ? 'border-pink-100' : theme === 'sky' ? 'border-sky-100' : 'border-white/20'} shrink-0 transition-colors duration-500`}>
         <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setIsWelcomeOpen(true)}>
-          <div className={`w-11 h-11 md:w-14 md:h-14 rounded-full ${theme === 'pink' ? 'bg-pink-50 border-pink-100' : theme === 'sky' ? 'bg-sky-50 border-sky-100' : 'bg-night-600 border-night-400'} flex items-center justify-center p-1 shadow-inner border shrink-0 transition-colors relative overflow-visible`}>
-            <img src={RABBIT_AVATAR_URL} alt="Logo" className="w-full h-full object-contain drop-shadow-sm relative z-10" />
+          <div className={`w-12 h-12 md:w-14 md:h-14 rounded-2xl ${theme === 'pink' ? 'bg-pink-50 border-pink-100' : theme === 'sky' ? 'bg-sky-50 border-sky-100' : 'bg-night-600 border-night-400'} flex items-center justify-center shadow-inner border-[3px] shrink-0 transition-colors relative overflow-hidden`}>
+            <img src={ICON_MOBILE_WEB} alt="Logo" className="w-full h-full object-cover md:hidden relative z-10" />
+            <img src={ICON_DESKTOP_WEB} alt="Logo" className="hidden md:block w-full h-full object-cover relative z-10" />
             {theme === 'dark' && (
               <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 w-8 h-8 md:w-10 md:h-10 mt-1">
-                 <img src={SUNGLASSES_URL} alt="Sunglasses" className="w-full h-full object-contain" />
+                 {/* <img src={SUNGLASSES_URL} alt="Sunglasses" className="w-full h-full object-contain" /> */}
               </div>
             )}
           </div>
