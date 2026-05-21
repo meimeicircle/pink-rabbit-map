@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { X, Share, PlusSquare, MonitorDown, Sparkles } from 'lucide-react';
-import { RABBIT_AVATAR_URL, MAP_3D_URL } from '../constants';
+import { ICON_DESKTOP_APP, ICON_MOBILE_APP } from '../constants';
 
 const InstallPwaPrompt: React.FC = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
@@ -29,7 +29,7 @@ const InstallPwaPrompt: React.FC = () => {
       // 延遲顯示，避免干擾
       setTimeout(() => {
         const hasClosed = sessionStorage.getItem('pwa-prompt-closed');
-        if (!hasClosed) {
+        if (!hasClosed || true) { // 暫時強制顯示以便測試
           setShowPrompt(true);
         }
       }, 3000);
@@ -41,7 +41,7 @@ const InstallPwaPrompt: React.FC = () => {
     if (isIosDevice) {
       setTimeout(() => {
         const hasClosed = sessionStorage.getItem('pwa-prompt-closed');
-        if (!hasClosed) {
+        if (!hasClosed || true) { // 暫時強制顯示以便測試
           setShowPrompt(true);
         }
       }, 3000);
@@ -80,11 +80,8 @@ const InstallPwaPrompt: React.FC = () => {
         <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-pink-200/20 to-transparent rounded-full blur-xl -mr-10 -mt-10 pointer-events-none"></div>
 
         {/* Icon (Composite: Rabbit + Map) */}
-        <div className="w-14 h-14 bg-gradient-to-br from-pink-50 to-white rounded-2xl flex flex-col items-center justify-center border border-pink-100 shadow-sm shrink-0 ml-1 relative overflow-visible">
-            {/* Rabbit on Top */}
-            <img src={RABBIT_AVATAR_URL} alt="Rabbit" className="w-9 h-9 object-contain drop-shadow-sm z-10 -mb-2" />
-            {/* Map on Bottom */}
-            <img src={MAP_3D_URL} alt="Map" className="w-8 h-8 object-contain drop-shadow-sm z-0" />
+        <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center border-2 border-pink-100 shadow-sm shrink-0 ml-1 relative overflow-hidden">
+            <img src={isMobile ? ICON_MOBILE_APP : ICON_DESKTOP_APP} alt="App Icon" className="w-full h-full object-cover" />
             
             {/* Sparkle Badge */}
             <div className="absolute -bottom-1 -right-1 bg-yellow-300 text-yellow-700 p-0.5 rounded-full border-2 border-white z-20">

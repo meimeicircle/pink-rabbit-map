@@ -11,7 +11,7 @@ export const LOADING_TEXT = "粉粉兔努力跑腿中...";
 
 // 🐰 回歸經典！使用微軟 3D Fluent Emoji (最可愛的白兔版本)
 export const ICON_DESKTOP_APP = iconDesktopApp;
-export const ICON_MOBILE_APP = iconMobileApp;
+export const ICON_MOBILE_APP = iconDesktopWeb;
 export const ICON_DESKTOP_WEB = iconDesktopWeb;
 export const ICON_MOBILE_WEB = iconMobileWeb;
 
