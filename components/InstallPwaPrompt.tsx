@@ -54,14 +54,11 @@ const InstallPwaPrompt: React.FC = () => {
     if (deferredPrompt) {
       deferredPrompt.prompt();
       deferredPrompt.userChoice.then((choiceResult: any) => {
-        if (choiceResult.outcome === 'accepted') {
-          console.log('User accepted the install prompt');
-        }
         setDeferredPrompt(null);
         setShowPrompt(false);
       });
     } else {
-       alert('請點選瀏覽器網址列右側的「下載/安裝」圖示來安裝應用程式唷！🚀');
+       alert('若按鈕未能啟動下載，請點選瀏覽器網址列最右側的「安裝」圖示，或至分享選單中選擇「加入主畫面/安裝」唷！🚀');
     }
   };
 

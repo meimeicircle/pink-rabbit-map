@@ -97,20 +97,20 @@ const App: React.FC = () => {
           name: "粉粉兔看房地圖",
           short_name: "粉粉兔",
           description: "可愛又實用的看房地圖，幫你 PK 建案！",
-          start_url: "/",
+          start_url: window.location.origin + "/",
           display: "standalone",
           background_color: "#ffffff",
           theme_color: "#fff0f5",
           orientation: "portrait",
           icons: [
             {
-              src: appIconUrl,
+              src: new URL(appIconUrl, window.location.href).href,
               sizes: "192x192",
               type: "image/png",
               purpose: "any maskable"
             },
             {
-              src: appIconUrl,
+              src: new URL(appIconUrl, window.location.href).href,
               sizes: "512x512",
               type: "image/png",
               purpose: "any maskable"
