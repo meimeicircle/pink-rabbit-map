@@ -78,7 +78,8 @@ const App: React.FC = () => {
   useEffect(() => {
     const updateIcon = async () => {
       try {
-        const isMobile = window.innerWidth < 768;
+        const userAgent = window.navigator.userAgent.toLowerCase();
+        const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
         const appIconUrl = isMobile ? ICON_MOBILE_APP : ICON_DESKTOP_APP;
         const webIconUrl = isMobile ? ICON_MOBILE_WEB : ICON_DESKTOP_WEB;
 
@@ -102,6 +103,12 @@ const App: React.FC = () => {
           theme_color: "#fff0f5",
           orientation: "portrait",
           icons: [
+            {
+              src: appIconUrl,
+              sizes: "192x192",
+              type: "image/png",
+              purpose: "any maskable"
+            },
             {
               src: appIconUrl,
               sizes: "512x512",

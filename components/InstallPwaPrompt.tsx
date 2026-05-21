@@ -29,7 +29,7 @@ const InstallPwaPrompt: React.FC = () => {
       // 延遲顯示，避免干擾
       setTimeout(() => {
         const hasClosed = sessionStorage.getItem('pwa-prompt-closed');
-        if (!hasClosed || true) { // 暫時強制顯示以便測試
+        if (!hasClosed) {
           setShowPrompt(true);
         }
       }, 3000);
@@ -37,15 +37,13 @@ const InstallPwaPrompt: React.FC = () => {
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 
-    // iOS 也要顯示教學
-    if (isIosDevice) {
-      setTimeout(() => {
-        const hasClosed = sessionStorage.getItem('pwa-prompt-closed');
-        if (!hasClosed || true) { // 暫時強制顯示以便測試
-          setShowPrompt(true);
-        }
-      }, 3000);
-    }
+    // iOS 也要顯示教學，桌面版則作為 fallback 強制顯示
+    setTimeout(() => {
+      const hasClosed = sessionStorage.getItem('pwa-prompt-closed');
+      if (!hasClosed) {
+        setShowPrompt(true);
+      }
+    }, 5000);
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
@@ -62,6 +60,8 @@ const InstallPwaPrompt: React.FC = () => {
         setDeferredPrompt(null);
         setShowPrompt(false);
       });
+    } else {
+       alert('請點選瀏覽器網址列右側的「下載/安裝」圖示來安裝應用程式唷！🚀');
     }
   };
 
