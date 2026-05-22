@@ -18,17 +18,8 @@
   <link rel="icon" type="image/png" sizes="512x512" href="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Rabbit%20face/3D/rabbit_face_3d.png">
   <link rel="apple-touch-icon" href="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Rabbit%20face/3D/rabbit_face_3d.png">
   
-  <!-- PWA Manifest will be injected dynamically -->
-  <script>
-    (function() {
-      var userAgent = window.navigator.userAgent.toLowerCase();
-      var isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
-      var link = document.createElement('link');
-      link.rel = 'manifest';
-      link.href = isMobile ? '/manifest-mobile.json' : '/manifest-desktop.json';
-      document.head.appendChild(link);
-    })();
-  </script>
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json">
   
   <meta name="theme-color" content="#fff0f5">
   <meta name="apple-mobile-web-app-capable" content="yes">
