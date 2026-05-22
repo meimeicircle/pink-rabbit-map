@@ -50,6 +50,8 @@ const InstallPwaPrompt: React.FC = () => {
     };
   }, []);
 
+  const [showFallback, setShowFallback] = useState(false);
+
   const handleInstallClick = () => {
     if (deferredPrompt) {
       deferredPrompt.prompt();
@@ -58,7 +60,8 @@ const InstallPwaPrompt: React.FC = () => {
         setShowPrompt(false);
       });
     } else {
-       alert('若按鈕未能啟動下載，請點選瀏覽器網址列最右側的「安裝」圖示，或至分享選單中選擇「加入主畫面/安裝」唷！🚀');
+       setShowFallback(true);
+       setTimeout(() => setShowFallback(false), 5000);
     }
   };
 
@@ -96,8 +99,12 @@ const InstallPwaPrompt: React.FC = () => {
             </p>
             
             {/* Install Button / Instructions */}
-            <div className="mt-1.5">
-              {isIOS ? (
+            <div className="mt-1.5 min-h-[30px] flex items-center">
+              {showFallback ? (
+                 <div className="text-[10px] text-pink-600 bg-pink-50 p-1.5 rounded-md font-medium border border-pink-100 animate-in fade-in slide-in-from-top-1 w-full relative">
+                   💡 請點網址列右側「安裝」圖示，或經分享選單加入主畫面
+                 </div>
+              ) : isIOS ? (
                  <div className="flex items-center gap-2 text-[10px] text-stone-400 font-medium">
                     <span>點擊 <Share size={10} className="inline mx-px" /> 分享</span>
                     <span>→ 加入主畫面 <PlusSquare size={10} className="inline mx-px" /></span>

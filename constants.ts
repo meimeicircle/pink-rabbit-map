@@ -1,19 +1,14 @@
 
 import { EstateProject, RabbitVerdict, MRTStation } from './types';
 
-import iconDesktopApp from './map1.png';
-import iconMobileApp from './map2.png';
-import iconDesktopWeb from './map3.png';
-import iconMobileWeb from './map4.png';
-
 export const APP_TITLE = "粉粉兔看房地圖";
 export const LOADING_TEXT = "粉粉兔努力跑腿中...";
 
 // 🐰 回歸經典！使用微軟 3D Fluent Emoji (最可愛的白兔版本)
-export const ICON_DESKTOP_APP = iconDesktopApp;
-export const ICON_MOBILE_APP = iconDesktopWeb;
-export const ICON_DESKTOP_WEB = iconDesktopWeb;
-export const ICON_MOBILE_WEB = iconMobileWeb;
+export const ICON_DESKTOP_APP = '/map3.png'; // 桌面版 app 圖
+export const ICON_MOBILE_APP = '/map1.png'; // 手機版 app 圖
+export const ICON_DESKTOP_WEB = '/map4.png'; // 網頁標籤
+export const ICON_MOBILE_WEB = '/map2.png'; // 網頁標籤 (也可以是4)
 
 export const RABBIT_AVATAR_URL = "https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Rabbit%20face/3D/rabbit_face_3d.png";
 
