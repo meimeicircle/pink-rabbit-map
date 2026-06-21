@@ -8,7 +8,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Noto Sans TC', 'sans-serif'],
+        sans: ['jf-openhuninn', 'Noto Sans TC', 'sans-serif'],
       },
       colors: {
         pink: {

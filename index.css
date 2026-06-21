@@ -1,10 +1,22 @@
 
+@font-face {
+  font-family: 'jf-openhuninn';
+  src: url('https://cdn.jsdelivr.net/gh/justfont/open-huninn-font/font/jf-openhuninn-2.0.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 /* Custom Styles */
 body {
-  font-family: 'Noto Sans TC', sans-serif;
+  font-family: 'jf-openhuninn', 'Noto Sans TC', sans-serif;
   background-color: #fff0f5;
   overscroll-behavior-y: none;
 }
+
+.font-jf {
+  font-family: 'jf-openhuninn', 'Noto Sans TC', sans-serif !important;
+}
+
 
 .rabbit-scroll::-webkit-scrollbar {
   width: 6px;

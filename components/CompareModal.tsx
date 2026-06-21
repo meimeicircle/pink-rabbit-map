@@ -30,8 +30,8 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
   const [isCapturing, setIsCapturing] = useState(false);
   
   // Row Visibility States
-  const [showR2, setShowR2] = useState(true);
-  const [showR3, setShowR3] = useState(true);
+  const [showR2, setShowR2] = useState(false);
+  const [showR3, setShowR3] = useState(false);
   
   // State for user inputs (Size, Unit Price, Parking Price)
   const [userInputs, setUserInputs] = useState<CalculatorInputs>({});
@@ -42,7 +42,7 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
 
   // Theme Styles
   const borderColor = themeColor === 'pink' ? 'border-pink-100' : themeColor === 'sky' ? 'border-sky-100' : 'border-night-pink-primary';
-  const headerBg = themeColor === 'pink' ? 'bg-pink-50 border-pink-100' : themeColor === 'sky' ? 'bg-sky-50 border-sky-100' : 'bg-night-pink-primary/10 border-night-pink-primary/20';
+  const headerBg = themeColor === 'pink' ? 'bg-gradient-to-b from-pink-100 to-pink-50/20 border-pink-100' : themeColor === 'sky' ? 'bg-gradient-to-b from-sky-100 to-sky-50/20 border-sky-100' : 'bg-gradient-to-b from-stone-800 to-stone-900 border-stone-800';
   const accentText = themeColor === 'pink' ? 'text-pink-400' : themeColor === 'sky' ? 'text-sky-400' : 'text-night-pink-primary';
   const iconColor = themeColor === 'pink' ? 'text-pink-400' : themeColor === 'sky' ? 'text-sky-400' : 'text-night-pink-primary';
   const tagClass = themeColor === 'pink' ? 'text-pink-600 bg-pink-50 border-pink-200' : themeColor === 'sky' ? 'text-sky-600 bg-sky-50 border-sky-200' : 'text-white bg-night-pink-primary border-night-pink-primary';
@@ -157,8 +157,8 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
     return (
       <div className="flex flex-wrap gap-1.5 items-start content-start tag-container">
         {items.map((item, i) => (
-          <span key={i} className={`tag-item inline-block text-[10px] md:text-xs font-bold border px-2 py-1 rounded-lg leading-snug whitespace-normal ${tagClass}`}>
-            <TextWithFluentEmojis text={item} emojiSize={12} />
+          <span key={i} className={`tag-item inline-block text-[11px] md:text-sm font-bold border px-3 py-1.5 rounded-xl leading-snug whitespace-normal shadow-sm ${tagClass}`}>
+            <TextWithFluentEmojis text={item} emojiSize={16} />
           </span>
         ))}
       </div>
@@ -168,22 +168,22 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
   const allRows = [
     { id: 'r2', isCalculator: true, label: '2房試算', icon: <Calculator size={16} />, render: (p: EstateProject) => renderCalculatorCell(p, 'r2') },
     { id: 'r3', isCalculator: true, label: '3房試算', icon: <Calculator size={16} />, render: (p: EstateProject) => renderCalculatorCell(p, 'r3') },
-    { id: 'base', label: '基地', icon: <Ruler size={16} />, render: (p: EstateProject) => <span className={`font-bold ${textMain}`}>{p.baseArea ? `${p.baseArea}坪` : '-'}</span> },
-    { id: 'public', label: '公設', icon: <TreePine size={16} />, render: (p: EstateProject) => p.publicRatio ? `${p.publicRatio}` : '-' },
-    { id: 'fee', label: '管理費', icon: <Coins size={16} />, render: (p: EstateProject) => p.managementFee ? (p.managementFee.includes('元') ? p.managementFee : `${p.managementFee}元/坪`) : '-' },
-    { id: 'units', label: '戶數', icon: <Users size={16} />, render: (p: EstateProject) => p.totalUnits ? `${p.totalUnits}戶` : '-' },
-    { id: 'score', label: '跑分', icon: <ArrowRightLeft size={16} />, render: (p: EstateProject) => (
+    { id: 'base', label: '基地', icon: <Ruler size={20} />, render: (p: EstateProject) => <span className={`font-bold ${textMain}`}>{p.baseArea ? `${p.baseArea}坪` : '-'}</span> },
+    { id: 'public', label: '公設', icon: <TreePine size={20} />, render: (p: EstateProject) => p.publicRatio ? `${p.publicRatio}` : '-' },
+    { id: 'fee', label: '管理費', icon: <Coins size={20} />, render: (p: EstateProject) => p.managementFee ? (p.managementFee.includes('元') ? p.managementFee : `${p.managementFee}元/坪`) : '-' },
+    { id: 'units', label: '戶數', icon: <Users size={20} />, render: (p: EstateProject) => p.totalUnits ? `${p.totalUnits}戶` : '-' },
+    { id: 'score', label: '跑分', icon: <ArrowRightLeft size={20} />, render: (p: EstateProject) => (
         <div className="flex items-center gap-2">
-           <div className="flex items-center gap-1">
-             <span className={`text-2xl font-black ${p.score === maxScore && p.score && p.score > 0 ? highlightText : textMuted}`}>{p.score || '-'}</span>
-             <span className={`text-xs ${textMuted} font-bold mt-1`}>分</span>
+           <div className="flex items-baseline gap-1">
+             <span className={`text-4xl font-black ${p.score === maxScore && p.score && p.score > 0 ? highlightText : textMuted}`}>{p.score || '-'}</span>
+             <span className={`text-sm ${textMuted} font-bold`}>分</span>
            </div>
-           {p.score === maxScore && p.score && p.score > 0 && (<Crown size={20} className="text-yellow-400 fill-yellow-400 animate-bounce-slow" />)}
+           {p.score === maxScore && p.score && p.score > 0 && (<Crown size={28} className="text-yellow-400 fill-yellow-400 animate-bounce-slow" />)}
         </div>
       )
     },
-    { id: 'selling', label: '訴求', icon: <Sparkles size={16} />, render: (p: EstateProject) => renderSellingPointTags(p.sellingPoint || '') },
-    { id: 'material', label: '建材', icon: <Zap size={16} />, render: (p: EstateProject) => <div className="flex flex-wrap gap-1.5 tag-container">{p.materialTags ? p.materialTags.split('|').map((t, i) => <span key={i} className={`tag-item text-[10px] md:text-xs px-2 py-1 rounded border bg-stone-100 border-stone-200 text-stone-600 whitespace-normal leading-tight`}>{t.trim()}</span>) : '-'}</div> },
+    { id: 'selling', label: '訴求', icon: <Sparkles size={20} />, render: (p: EstateProject) => renderSellingPointTags(p.sellingPoint || '') },
+    { id: 'material', label: '建材', icon: <Zap size={20} />, render: (p: EstateProject) => <div className="flex flex-wrap gap-1.5 tag-container">{p.materialTags ? p.materialTags.split('|').map((t, i) => <span key={i} className={`tag-item text-[11px] md:text-sm px-3 py-1.5 rounded-xl border bg-stone-100 border-stone-200 text-stone-600 whitespace-normal leading-tight shadow-sm`}>{t.trim()}</span>) : '-'}</div> },
   ];
 
   const visibleRows = allRows.filter(row => {
@@ -199,6 +199,13 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
     try {
       // 關鍵修正：等待所有字型載入完成，避免 fallback 字型導致高度計算錯誤
       await document.fonts.ready;
+      
+      // 等待所有圖片載入完成，避免截圖時圖片消失或高度計算錯誤
+      const images = captureRef.current.querySelectorAll('img');
+      await Promise.all(Array.from(images).map(img => {
+        if (img.complete) return Promise.resolve();
+        return new Promise(resolve => { img.onload = resolve; img.onerror = resolve; });
+      }));
 
       const canvas = await html2canvas(captureRef.current, {
         scale: 2, // 保持清晰度
@@ -207,13 +214,34 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
         logging: false,
         width: 1000, // 用戶指定寬度
         windowWidth: 1000,
+        x: 0,
+        y: 0,
         onclone: (clonedDoc) => {
            const element = clonedDoc.querySelector('.rabbit-capture-target') as HTMLElement;
            if (element) {
-             // 設定精確的寬度與內距
+             // 設定精確的寬度與內距，讓 html2canvas 重新計算高度
              element.style.width = '1000px';
              element.style.padding = '30px';
              element.style.backgroundColor = '#ffffff';
+             element.style.height = 'auto';
+             element.style.maxHeight = 'none';
+             element.style.overflow = 'visible';
+             
+             // 隱藏不想要出現在截圖裡的元素
+             const hiddenElements = element.querySelectorAll('.hide-on-capture');
+             hiddenElements.forEach((el) => {
+               (el as HTMLElement).style.display = 'none';
+             });
+
+             // 確保所有父層級不會剪裁內容
+             let current = element.parentElement;
+             while (current && current !== clonedDoc.body) {
+                 current.style.height = 'auto';
+                 current.style.maxHeight = 'none';
+                 current.style.overflow = 'visible';
+                 current.style.transform = 'none';
+                 current = current.parentElement;
+             }
              
              // --- Replace Inputs with Text for Screenshot ---
              // Only visible inputs are in the DOM, so this loop works on whatever is visible
@@ -340,25 +368,49 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
   };
 
   return (
-    <div className="fixed inset-0 z-[3000] flex items-center justify-center bg-stone-900/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-      <div className={`${modalBg} rounded-[2rem] w-full max-w-5xl shadow-2xl border-8 ${borderColor} flex flex-col max-h-[90vh] overflow-hidden`}>
+    <div className="fixed inset-0 z-[3000] flex items-center justify-center bg-stone-900/60 backdrop-blur-sm p-4 animate-in fade-in duration-200 font-sans">
+      <div className={`${modalBg} rounded-[2rem] md:rounded-[2.5rem] w-full max-w-5xl shadow-2xl border-8 ${borderColor} flex flex-col max-h-[90vh] overflow-hidden`}>
         <div className={`flex-1 overflow-auto rabbit-scroll ${modalBg} relative`}>
-          <div ref={captureRef} className={`rabbit-capture-target ${modalBg}`}>
-            <div className={`p-4 md:p-6 flex justify-between items-center border-b ${headerBg}`}>
-              <div className="flex items-center gap-3">
-                 <div className={`${modalBg} p-2 rounded-full shadow-sm`}><Trophy className="text-yellow-400 fill-yellow-400" size={24} /></div>
-                 <div><h2 className={`text-xl font-bold ${textMain}`}>粉粉兔幫你看</h2><p className={`text-xs ${accentText} font-bold tracking-wider`}>PK SYSTEM</p></div>
-              </div>
+          <div ref={captureRef} className={`rabbit-capture-target ${modalBg} relative`}>
+            
+            {/* Redesigned Header with Gradient and Characters */}
+            <div className={`px-2 py-3 md:py-4 flex flex-col items-center justify-center relative ${headerBg} rounded-t-[1.5rem] border-b-4 ${borderColor}`}>
+               <div className="flex items-center justify-center z-10 relative gap-2 md:gap-4 w-full" style={{ minHeight: '80px' }}>
+                 
+                 {/* Left Images */}
+                 <div className="flex items-end justify-end shrink-0" style={{ width: '80px', minWidth: '80px' }}>
+                   <img src="/pkp.png" alt="粉粉" className="hide-on-capture w-16 h-16 md:w-20 md:h-20 object-contain drop-shadow-md z-10 hover:scale-105 transition-transform" style={{ minWidth: '64px', minHeight: '64px', flexShrink: 0 }} />
+                 </div>
+                 
+                 {/* Center Title Area */}
+                 <div className="flex flex-col items-center flex-shrink-0 mx-1 md:mx-4 shrink-0">
+                    <div className="flex items-center gap-1.5 md:gap-2 mb-1">
+                      <div className={`bg-white p-1 md:p-1.5 rounded-full shadow-md ${textMain} shrink-0`}>
+                         <Trophy className="text-yellow-400 fill-yellow-400" size={16} />
+                      </div>
+                      <h2 className={`text-base md:text-2xl font-extrabold ${textMain} tracking-widest drop-shadow-sm`} style={{ whiteSpace: 'nowrap' }}>粉粉兔殘酷擂台</h2>
+                    </div>
+                    <p className={`text-[9px] md:text-xs ${accentText} font-bold tracking-[0.2em] bg-white/70 px-3 py-0.5 rounded-full shadow-sm`} style={{ whiteSpace: 'nowrap' }}>
+                      PK SYSTEM
+                    </p>
+                 </div>
+
+                 {/* Right Images */}
+                 <div className="flex items-end justify-start shrink-0" style={{ width: '80px', minWidth: '80px' }}>
+                   <img src="/pkbb.png" alt="冰冰打電腦" className="hide-on-capture w-16 h-16 md:w-20 md:h-20 object-contain drop-shadow-md z-10 hover:scale-105 transition-transform" style={{ minWidth: '64px', minHeight: '64px', flexShrink: 0 }} />
+                 </div>
+               </div>
             </div>
-            <div className="inline-block min-w-full align-middle p-2 md:p-4">
+
+            <div className="inline-block min-w-full align-middle p-2 md:p-6 pb-24 md:pb-28 relative z-20">
               <table className={`min-w-full border-collapse rounded-xl overflow-hidden shadow-sm border ${tableBorder}`}>
                 <thead>
                   <tr>
-                    <th className={`sticky left-0 z-20 w-20 md:w-28 p-2 md:p-4 text-center ${textMuted} font-medium text-xs md:text-sm ${tableHeaderBg} border-b ${tableBorder}`}><span>項目</span></th>
+                    <th className={`sticky left-0 z-20 w-20 md:w-28 p-3 md:p-4 text-center ${textMuted} font-bold text-sm md:text-base ${tableHeaderBg} border-b-2 ${tableBorder}`}><span>項目</span></th>
                     {projects.map(p => (
-                      <th key={p.id} className={`w-40 md:w-64 p-2 md:p-4 text-left align-top border-b ${tableBorder} ${tableCellBg} border-l ${stickyBorder}`}>
+                      <th key={p.id} className={`w-40 md:w-64 p-3 md:p-4 text-left align-top border-b-2 ${tableBorder} ${tableCellBg} border-l ${stickyBorder}`}>
                         {/* 加入 project-name class 以便截圖時鎖定修正 */}
-                        <div className={`text-sm md:text-lg font-bold ${textMain} mb-1 line-clamp-2 project-name`}>
+                        <div className={`text-base md:text-xl font-bold ${textMain} mb-1 line-clamp-2 project-name`}>
                           <TextWithFluentEmojis text={p.name} emojiSize={20} />
                         </div>
                       </th>
@@ -368,27 +420,34 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
                 <tbody>
                   {visibleRows.map((row, idx) => (
                     <tr key={idx} className={`hover:bg-stone-50 transition-colors ${row.isCalculator ? 'calculator-row' : ''}`}>
-                      <td className={`sticky left-0 z-20 w-20 md:w-28 p-2 md:p-4 border-b ${stickyBorder} ${textMuted} font-bold text-xs md:text-sm ${stickyColBg} border-r ${tableBorder} shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)]`}>
-                        <div className="flex flex-col items-center justify-center gap-1 text-center">
-                          <div className={`w-6 h-6 md:w-8 md:h-8 rounded-full ${modalBg} border ${stickyBorder} flex items-center justify-center ${iconColor} shrink-0`}>{row.icon}</div>
-                          <span className="text-[10px] md:text-xs leading-none mt-0.5">{row.label}</span>
+                      <td className={`sticky left-0 z-20 w-20 md:w-28 p-3 md:p-4 border-b ${stickyBorder} ${textMuted} font-bold text-sm md:text-base ${stickyColBg} border-r ${tableBorder} shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)]`}>
+                        <div className="flex flex-col items-center justify-center gap-2 text-center">
+                          <div className={`w-8 h-8 md:w-10 md:h-10 rounded-full ${modalBg} border-2 ${stickyBorder} flex items-center justify-center ${iconColor} shrink-0 shadow-sm`}>{row.icon}</div>
+                          <span className="text-xs md:text-sm leading-none mt-0.5">{row.label}</span>
                         </div>
                       </td>
                       {projects.map(p => (
-                        <td key={p.id} className={`w-40 md:w-64 p-2 md:p-4 border-b ${stickyBorder} text-xs md:text-sm ${textMain} align-middle ${tableCellBg} border-l ${stickyBorder}`}>{row.render(p)}</td>
+                        <td key={p.id} className={`w-40 md:w-64 p-3 md:p-4 border-b ${stickyBorder} text-sm md:text-base ${textMain} align-middle ${tableCellBg} border-l ${stickyBorder}`}>{row.render(p)}</td>
                       ))}
                     </tr>
                   ))}
                 </tbody>
               </table>
               
-              <div className="mt-3 text-center">
-                 <p className={`text-[10px] ${textMuted} font-bold ${tableHeaderBg} border ${tableBorder} inline-block px-3 py-1.5 rounded-lg leading-relaxed`}>
-                   <FluentEmoji emoji="🐧" size={14} /> 分數不代表絕對，分數偏低但價格也比較便宜=合理
-                 </p>
+              <div className="mt-4 md:mt-6 flex justify-center z-10 relative pointer-events-none">
+                 <div className={`text-xs md:text-sm ${textMuted} font-bold ${tableHeaderBg} border-2 ${tableBorder} flex items-center justify-center gap-2 px-3 md:px-4 py-1.5 md:py-2 rounded-xl shadow-sm`} style={{ width: 'fit-content' }}>
+                   <img src="/pkbb.png" alt="冰冰" className="w-5 h-5 md:w-6 md:h-6 object-contain drop-shadow-sm translate-y-[-2px]" style={{ minWidth: '20px', minHeight: '20px', flexShrink: 0 }} /> 
+                   <span className="text-stone-500" style={{ display: 'inline-block' }}>冰冰警語：分數不代表絕對，偏低但價格便宜也很合理喔！</span>
+                 </div>
               </div>
 
-              <div className={`mt-2 text-center ${textMuted} text-[10px] font-bold tracking-widest uppercase opacity-50 pb-2`}>POWERED BY RABBIT PINK PINK <FluentEmoji emoji="🐰" size={14} /></div>
+              <div className={`mt-4 text-center ${textMuted} text-[10px] md:text-xs font-bold tracking-widest uppercase opacity-60 pb-2 flex items-center justify-center gap-2 z-10 relative`}>
+                POWERED BY RABBIT PINK PINK <FluentEmoji emoji="🐰" size={16} />
+              </div>
+
+              {/* Background decorative images at the bottom left/right */}
+              <img src="/pk2.png" alt="粉粉與冰冰" className="hide-on-capture absolute left-4 md:left-6 bottom-4 w-28 h-28 md:w-36 md:h-36 object-contain opacity-40 z-0 pointer-events-none" style={{ minWidth: '112px', minHeight: '112px' }} />
+              <img src="/pkb.png" alt="冰冰地圖" className="hide-on-capture absolute right-4 md:right-6 bottom-4 w-24 h-24 md:w-32 md:h-32 object-contain opacity-40 z-0 pointer-events-none" style={{ minWidth: '96px', minHeight: '96px' }} />
             </div>
           </div>
         </div>

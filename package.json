@@ -12,6 +12,7 @@
     "lint": "tsc --noEmit"
   },
   "dependencies": {
+    "@fontpkg/jf-openhuninn-2-0": "^2.0.0",
     "@types/express": "^5.0.6",
     "@types/node-fetch": "^2.6.13",
     "downloadjs": "^1.4.7",
