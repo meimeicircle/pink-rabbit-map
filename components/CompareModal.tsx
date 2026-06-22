@@ -167,7 +167,7 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
     return (
       <div className="flex flex-wrap gap-1.5 items-start content-start tag-container">
         {items.map((item, i) => (
-          <span key={i} className={`tag-item inline-block text-[10px] md:text-xs font-bold border px-2 py-1 rounded-lg leading-snug whitespace-normal ${tagClass}`}>
+          <span key={i} className={`tag-item inline-block max-w-full break-words text-[10px] md:text-xs font-bold border px-2 py-1 rounded-lg leading-snug whitespace-normal ${tagClass}`}>
             <TextWithFluentEmojis text={item} emojiSize={12} />
           </span>
         ))}
@@ -198,7 +198,7 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
       )
     },
     { id: 'selling', label: '訴求', icon: <Sparkles size={16} />, render: (p: EstateProject) => renderSellingPointTags(p.sellingPoint || '') },
-    { id: 'material', label: '建材', icon: <Zap size={16} />, render: (p: EstateProject) => <div className="flex flex-wrap gap-1.5 tag-container">{p.materialTags ? p.materialTags.split('|').map((t, i) => <span key={i} className={`tag-item text-[10px] md:text-xs px-2 py-1 rounded border bg-stone-100 border-stone-200 text-stone-600 whitespace-normal leading-tight`}>{t.trim()}</span>) : '-'}</div> },
+    { id: 'material', label: '建材', icon: <Zap size={16} />, render: (p: EstateProject) => <div className="flex min-w-0 flex-wrap gap-1.5 tag-container">{p.materialTags ? p.materialTags.split('|').map((t, i) => <span key={i} className={`tag-item max-w-full break-words text-[10px] md:text-xs px-2 py-1 rounded border bg-stone-100 border-stone-200 text-stone-600 whitespace-normal leading-tight`}>{t.trim()}</span>) : '-'}</div> },
   ];
 
   const visibleRows = allRows.filter(row => {
@@ -474,14 +474,18 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
             </div>
             <div className="capture-table-shell overflow-x-auto rabbit-scroll">
               <div className="inline-block min-w-full align-middle p-2 md:p-4">
-              <table className={`min-w-full border-collapse rounded-xl overflow-hidden shadow-sm border ${tableBorder}`}>
+              <table className={`w-full table-fixed border-collapse rounded-xl overflow-hidden shadow-sm border ${tableBorder}`}>
+                <colgroup>
+                  <col className="w-20 md:w-28" />
+                  {projects.map(p => <col key={`col-${p.id}`} />)}
+                </colgroup>
                 <thead>
                   <tr>
                     <th className={`sticky left-0 z-20 w-20 md:w-28 p-2 md:p-4 text-center ${textMuted} font-medium text-xs md:text-sm ${tableHeaderBg} border-b ${tableBorder}`}><span>項目</span></th>
                     {projects.map(p => (
-                      <th key={p.id} className={`w-40 md:w-64 p-2 md:p-4 text-left align-top border-b ${tableBorder} ${tableCellBg} border-l ${stickyBorder}`}>
+                      <th key={p.id} className={`min-w-0 p-2 md:p-4 text-left align-top border-b ${tableBorder} ${tableCellBg} border-l ${stickyBorder}`}>
                         {/* 加入 project-name class 以便截圖時鎖定修正 */}
-                        <div className={`text-sm md:text-lg font-bold ${textMain} mb-1 line-clamp-2 project-name`}>
+                        <div className={`min-w-0 break-words text-sm md:text-lg font-bold ${textMain} mb-1 line-clamp-2 project-name`}>
                           <TextWithFluentEmojis text={p.name} emojiSize={20} />
                         </div>
                       </th>
@@ -498,7 +502,7 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
                         </div>
                       </td>
                       {projects.map(p => (
-                        <td key={p.id} className={`w-40 md:w-64 p-2 md:p-4 border-b ${stickyBorder} text-xs md:text-sm ${textMain} align-middle ${tableCellBg} border-l ${stickyBorder}`}>{row.render(p)}</td>
+                        <td key={p.id} className={`min-w-0 break-words p-2 md:p-4 border-b ${stickyBorder} text-xs md:text-sm ${textMain} align-middle ${tableCellBg} border-l ${stickyBorder}`}>{row.render(p)}</td>
                       ))}
                     </tr>
                   ))}
