@@ -191,7 +191,7 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
            {p.score === maxScore && p.score && p.score > 0 && (
              <span className="rabbit-pick-badge inline-flex items-center gap-1 rounded-full border border-pink-200 bg-pink-50 px-2 py-1 text-[10px] font-black text-pink-600">
                <Crown size={14} className="text-yellow-400 fill-yellow-400" />
-               粉粉兔首選
+               評分NO.1
              </span>
            )}
         </div>
@@ -239,6 +239,7 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
              // 設定精確的寬度與內距
               element.style.width = '1000px';
               element.style.padding = '30px';
+              element.style.position = 'relative';
               element.style.backgroundColor = '#fff5f9';
               element.style.backgroundImage = 'linear-gradient(180deg, #fffafd 0%, #fff1f6 55%, #fce7f3 100%)';
              
@@ -351,10 +352,13 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
 
                 .capture-watermark {
                   display: block !important;
-                  position: relative !important;
-                  height: 180px !important;
-                  overflow: hidden !important;
-                  margin-top: 8px !important;
+                  position: absolute !important;
+                  left: 30px !important;
+                  right: 30px !important;
+                  bottom: 26px !important;
+                  height: 110px !important;
+                  overflow: visible !important;
+                  pointer-events: none !important;
                 }
 
                 .capture-watermark img {
@@ -364,17 +368,17 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
                 }
 
                 .capture-watermark-rabbit {
-                  width: 210px !important;
-                  height: 210px !important;
-                  left: 48px !important;
-                  bottom: -46px !important;
+                  width: 105px !important;
+                  height: 105px !important;
+                  left: 0 !important;
+                  bottom: 0 !important;
                 }
 
                 .capture-watermark-bing {
-                  width: 220px !important;
-                  height: 220px !important;
-                  right: 48px !important;
-                  bottom: -52px !important;
+                  width: 110px !important;
+                  height: 110px !important;
+                  right: 0 !important;
+                  bottom: 0 !important;
                 }
                
                ::-webkit-scrollbar { display: none; }
@@ -445,9 +449,9 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
               </div>
             </div>
             <div className="px-2 pb-2 md:px-4 md:pb-4">
-              <div className="rabbit-review-banner mx-auto mt-4 flex max-w-2xl items-center gap-3 rounded-xl border border-pink-100 bg-pink-50/70 px-4 py-2.5 text-left shadow-sm">
+              <div className="rabbit-review-banner mx-auto mt-4 flex max-w-2xl items-center justify-center gap-3 rounded-xl border border-pink-100 bg-pink-50/70 px-4 py-2.5 text-center shadow-sm">
                 <img src={RABBIT_REVIEW_IMAGE} alt="粉粉兔與冰冰共同檢視" className="h-14 w-20 shrink-0 object-contain" />
-                <div>
+                <div className="text-center">
                   <p className="text-[11px] font-black text-stone-700">粉粉兔與冰冰的看房提醒</p>
                   <p className={`text-[10px] ${textMuted} font-bold leading-relaxed`}>
                     分數不代表絕對，分數低但價格也較低=合理
