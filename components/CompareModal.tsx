@@ -8,6 +8,8 @@ import { FluentEmoji, TextWithFluentEmojis } from '../utils/fluentEmoji';
 
 const RABBIT_TITLE_IMAGE = '/assets/pk/pk-title.png';
 const RABBIT_REVIEW_IMAGE = '/assets/pk/rabbit-review.png';
+const RABBIT_WATERMARK_IMAGE = '/assets/pk/rabbit-laptop.png';
+const BING_WATERMARK_IMAGE = '/assets/pk/bing-map-stamp.png';
 
 interface CompareModalProps {
   isOpen: boolean;
@@ -52,8 +54,6 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
 
   // Theme Styles
   const borderColor = themeColor === 'pink' ? 'border-pink-100' : themeColor === 'sky' ? 'border-sky-100' : 'border-night-pink-primary';
-  const headerBg = themeColor === 'pink' ? 'bg-pink-50 border-pink-100' : themeColor === 'sky' ? 'bg-sky-50 border-sky-100' : 'bg-night-pink-primary/10 border-night-pink-primary/20';
-  const accentText = themeColor === 'pink' ? 'text-pink-400' : themeColor === 'sky' ? 'text-sky-400' : 'text-night-pink-primary';
   const iconColor = themeColor === 'pink' ? 'text-pink-400' : themeColor === 'sky' ? 'text-sky-400' : 'text-night-pink-primary';
   const tagClass = themeColor === 'pink' ? 'text-pink-600 bg-pink-50 border-pink-200' : themeColor === 'sky' ? 'text-sky-600 bg-sky-50 border-sky-200' : 'text-white bg-night-pink-primary border-night-pink-primary';
   const highlightText = themeColor === 'pink' ? 'text-pink-600' : themeColor === 'sky' ? 'text-sky-600' : 'text-night-pink-primary';
@@ -229,7 +229,7 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
       const canvas = await html2canvas(captureRef.current, {
         scale: 2, // 保持清晰度
         useCORS: true, 
-        backgroundColor: '#ffffff', 
+        backgroundColor: null,
         logging: false,
         width: 1000, // 用戶指定寬度
         windowWidth: 1000,
@@ -237,9 +237,10 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
            const element = clonedDoc.querySelector('.rabbit-capture-target') as HTMLElement;
            if (element) {
              // 設定精確的寬度與內距
-             element.style.width = '1000px';
-             element.style.padding = '30px';
-             element.style.backgroundColor = '#ffffff';
+              element.style.width = '1000px';
+              element.style.padding = '30px';
+              element.style.backgroundColor = '#fff5f9';
+              element.style.backgroundImage = 'linear-gradient(180deg, #fffafd 0%, #fff1f6 55%, #fce7f3 100%)';
              
              // --- Replace Inputs with Text for Screenshot ---
              // Only visible inputs are in the DOM, so this loop works on whatever is visible
@@ -339,10 +340,42 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
                
                .sticky { position: static !important; }
                
-               th, td { 
-                 border: 1px solid #e5e7eb !important; 
-                 height: auto !important;
-               }
+                th, td { 
+                  border: 1px solid #e5e7eb !important; 
+                  height: auto !important;
+                }
+
+                .rabbit-pk-header {
+                  background: transparent !important;
+                }
+
+                .capture-watermark {
+                  display: block !important;
+                  position: relative !important;
+                  height: 180px !important;
+                  overflow: hidden !important;
+                  margin-top: 8px !important;
+                }
+
+                .capture-watermark img {
+                  position: absolute !important;
+                  opacity: 0.4 !important;
+                  object-fit: contain !important;
+                }
+
+                .capture-watermark-rabbit {
+                  width: 210px !important;
+                  height: 210px !important;
+                  left: 48px !important;
+                  bottom: -46px !important;
+                }
+
+                .capture-watermark-bing {
+                  width: 220px !important;
+                  height: 220px !important;
+                  right: 48px !important;
+                  bottom: -52px !important;
+                }
                
                ::-webkit-scrollbar { display: none; }
              `;
@@ -370,7 +403,7 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
       <div className={`${modalBg} rounded-[2rem] w-full max-w-5xl shadow-2xl border-8 ${borderColor} flex flex-col max-h-[90vh] overflow-hidden`}>
         <div className={`flex-1 overflow-y-auto rabbit-scroll ${modalBg} relative`}>
           <div ref={captureRef} className={`rabbit-capture-target ${modalBg}`}>
-            <div className={`rabbit-pk-header w-full overflow-hidden border-b ${headerBg}`}>
+            <div className="rabbit-pk-header w-full overflow-hidden border-b border-transparent bg-transparent">
               <img
                 src={RABBIT_TITLE_IMAGE}
                 alt="@threads_看房粉粉兔 粉粉兔殘酷擂台"
@@ -423,6 +456,10 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
               </div>
 
               <div className={`mt-3 text-center ${textMuted} text-[10px] font-bold tracking-widest uppercase opacity-60 pb-2`}>POWERED BY RABBIT PINK PINK</div>
+              <div className="capture-watermark hidden" aria-hidden="true">
+                <img className="capture-watermark-rabbit" src={RABBIT_WATERMARK_IMAGE} alt="" />
+                <img className="capture-watermark-bing" src={BING_WATERMARK_IMAGE} alt="" />
+              </div>
             </div>
           </div>
         </div>
