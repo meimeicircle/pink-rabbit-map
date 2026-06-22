@@ -367,30 +367,30 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
                 .capture-watermark {
                   display: block !important;
                   position: absolute !important;
-                  left: 30px !important;
-                  right: 30px !important;
-                  bottom: 18px !important;
-                  height: 110px !important;
+                  left: 110px !important;
+                  right: 110px !important;
+                  bottom: 12px !important;
+                  height: 125px !important;
                   overflow: visible !important;
                   pointer-events: none !important;
                 }
 
                 .capture-watermark img {
                   position: absolute !important;
-                  opacity: 0.4 !important;
+                  opacity: 1 !important;
                   object-fit: contain !important;
                 }
 
                 .capture-watermark-rabbit {
-                  width: 105px !important;
-                  height: 105px !important;
+                  width: 120px !important;
+                  height: 120px !important;
                   left: 0 !important;
                   bottom: 0 !important;
                 }
 
                 .capture-watermark-bing {
-                  width: 110px !important;
-                  height: 110px !important;
+                  width: 125px !important;
+                  height: 125px !important;
                   right: 0 !important;
                   bottom: 0 !important;
                 }
@@ -415,6 +415,16 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
 
                 .rabbit-review-banner > img {
                   display: none !important;
+                }
+
+                .rabbit-review-banner p:first-of-type {
+                  font-size: 18px !important;
+                  line-height: 1.35 !important;
+                }
+
+                .rabbit-review-banner p:last-of-type {
+                  font-size: 14px !important;
+                  line-height: 1.45 !important;
                 }
 
                 .rabbit-review-banner::before {
