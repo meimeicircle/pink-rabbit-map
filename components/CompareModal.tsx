@@ -1,5 +1,5 @@
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { EstateProject } from '../types';
 import { X, Sparkles, MessageCircle, Calculator, Ruler, TreePine, Users, Zap, Crown, Download, Loader2, Coins, ArrowRightLeft, Car, CheckSquare, Square } from 'lucide-react';
 import html2canvas from 'html2canvas';
@@ -33,11 +33,18 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
   const [isCapturing, setIsCapturing] = useState(false);
   
   // Row Visibility States
-  const [showR2, setShowR2] = useState(true);
-  const [showR3, setShowR3] = useState(true);
+  const [showR2, setShowR2] = useState(false);
+  const [showR3, setShowR3] = useState(false);
   
   // State for user inputs (Size, Unit Price, Parking Price)
   const [userInputs, setUserInputs] = useState<CalculatorInputs>({});
+
+  useEffect(() => {
+    if (isOpen) {
+      setShowR2(false);
+      setShowR3(false);
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 

@@ -44,6 +44,12 @@ export const normalizeMaterialTags = (str: string): string => {
   return normalizedSegments.join('|');
 };
 
+const normalizeBaseArea = (value: string): string => {
+  if (!value) return '';
+  const parsed = parseFloat(value.replace(/,/g, ''));
+  return Number.isNaN(parsed) ? value : String(Math.floor(parsed));
+};
+
 /**
  * 解析貼上的 TSV (Tab Separated Values) 或 CSV
  * 使用 State Machine 模式來正確處理 Excel 複製過來帶有雙引號和換行的內容
@@ -243,7 +249,7 @@ export const parsePasteData = (text: string): EstateProject[] => {
       
       // Pro Fields
       totalUnits: getVal(idx.totalUnits), 
-      baseArea: getVal(idx.baseArea),
+      baseArea: normalizeBaseArea(getVal(idx.baseArea)),
       publicRatio: getVal(idx.publicRatio),
       managementFee: getVal(idx.managementFee), 
       floorHeightMeters: getVal(idx.floorHeightMeters), // New Field
