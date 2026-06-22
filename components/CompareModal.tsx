@@ -382,15 +382,15 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
                 }
 
                 .capture-watermark-rabbit {
-                  width: 120px !important;
                   height: 120px !important;
+                  width: auto !important;
                   left: 0 !important;
                   bottom: 0 !important;
                 }
 
                 .capture-watermark-bing {
-                  width: 125px !important;
-                  height: 125px !important;
+                  width: auto !important;
+                  height: 120px !important;
                   right: 0 !important;
                   bottom: 0 !important;
                 }
