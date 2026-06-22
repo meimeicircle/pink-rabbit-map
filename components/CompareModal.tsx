@@ -6,7 +6,7 @@ import html2canvas from 'html2canvas';
 import { ThemeColor } from '../App';
 import { FluentEmoji, TextWithFluentEmojis } from '../utils/fluentEmoji';
 
-const RABBIT_COMPARE_IMAGE = '/assets/pk/rabbit-compare.png';
+const RABBIT_TITLE_IMAGE = '/assets/pk/pk-title.png';
 const RABBIT_REVIEW_IMAGE = '/assets/pk/rabbit-review.png';
 
 interface CompareModalProps {
@@ -368,28 +368,17 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
   return (
     <div className="fixed inset-0 z-[3000] flex items-center justify-center bg-stone-900/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
       <div className={`${modalBg} rounded-[2rem] w-full max-w-5xl shadow-2xl border-8 ${borderColor} flex flex-col max-h-[90vh] overflow-hidden`}>
-        <div className={`flex-1 overflow-auto rabbit-scroll ${modalBg} relative`}>
+        <div className={`flex-1 overflow-y-auto rabbit-scroll ${modalBg} relative`}>
           <div ref={captureRef} className={`rabbit-capture-target ${modalBg}`}>
-            <div className={`rabbit-pk-header relative min-h-[116px] overflow-hidden border-b px-5 py-5 md:px-8 ${headerBg}`}>
-              <div className="relative z-10 flex h-full items-center justify-center text-center">
-                <div>
-                  <div className="mb-1 inline-flex items-center gap-1.5 rounded-full border border-pink-200 bg-white/90 px-3 py-1.5 text-sm font-black text-pink-500 shadow-sm">
-                    <Sparkles size={16} /> @threads_看房粉粉兔
-                  </div>
-                  <h2 className={`text-xl md:text-2xl font-black ${textMain}`}>粉粉兔殘酷擂台</h2>
-                  <p className={`text-xs ${accentText} font-black tracking-[0.22em]`}>PK SYSTEM</p>
-                </div>
-              </div>
+            <div className={`rabbit-pk-header w-full overflow-hidden border-b ${headerBg}`}>
               <img
-                src={RABBIT_COMPARE_IMAGE}
-                alt="粉粉兔建案比較"
-                className="rabbit-header-mascot absolute -bottom-5 left-3 h-[112px] w-[94px] object-contain drop-shadow-sm md:left-8 md:h-[128px] md:w-[108px]"
+                src={RABBIT_TITLE_IMAGE}
+                alt="@threads_看房粉粉兔 粉粉兔殘酷擂台"
+                className="block h-auto w-full object-contain"
               />
-              <div className="absolute right-5 top-5 hidden rotate-3 rounded-lg border-2 border-pink-200 bg-white/85 px-3 py-2 text-center text-[10px] font-black leading-tight text-pink-500 shadow-sm sm:block">
-                基地、公設、價格<br />一格一格比清楚
-              </div>
             </div>
-            <div className="inline-block min-w-full align-middle p-2 md:p-4">
+            <div className="overflow-x-auto rabbit-scroll">
+              <div className="inline-block min-w-full align-middle p-2 md:p-4">
               <table className={`min-w-full border-collapse rounded-xl overflow-hidden shadow-sm border ${tableBorder}`}>
                 <thead>
                   <tr>
@@ -420,7 +409,9 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
                   ))}
                 </tbody>
               </table>
-              
+              </div>
+            </div>
+            <div className="px-2 pb-2 md:px-4 md:pb-4">
               <div className="rabbit-review-banner mx-auto mt-4 flex max-w-2xl items-center gap-3 rounded-xl border border-pink-100 bg-pink-50/70 px-4 py-2.5 text-left shadow-sm">
                 <img src={RABBIT_REVIEW_IMAGE} alt="粉粉兔與冰冰共同檢視" className="h-14 w-20 shrink-0 object-contain" />
                 <div>
