@@ -285,11 +285,25 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
              const style = clonedDoc.createElement('style');
              style.innerHTML = `
                /* === 表格佈局修正 === */
-               table { 
-                 width: 100% !important; 
-                 table-layout: fixed !important; 
-                 border-collapse: collapse !important; 
-               }
+                table { 
+                  width: 100% !important; 
+                  table-layout: fixed !important; 
+                  border-collapse: collapse !important; 
+                }
+
+                .capture-table-shell {
+                  overflow: visible !important;
+                  margin-top: 18px !important;
+                  padding: 16px !important;
+                  border: 1px solid rgba(244, 171, 199, 0.42) !important;
+                  border-radius: 26px !important;
+                  background: rgba(255, 255, 255, 0.96) !important;
+                  box-shadow: 0 14px 28px rgba(190, 82, 126, 0.18) !important;
+                }
+
+                .capture-table-shell > div {
+                  padding: 0 !important;
+                }
                
                th:first-child, td:first-child { 
                  width: 100px !important; 
@@ -342,7 +356,7 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
                .sticky { position: static !important; }
                
                 th, td { 
-                  border: 1px solid #e5e7eb !important; 
+                  border: 1px solid #f5d7e3 !important; 
                   height: auto !important;
                 }
 
@@ -355,7 +369,7 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
                   position: absolute !important;
                   left: 30px !important;
                   right: 30px !important;
-                  bottom: 26px !important;
+                  bottom: 18px !important;
                   height: 110px !important;
                   overflow: visible !important;
                   pointer-events: none !important;
@@ -379,6 +393,40 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
                   height: 110px !important;
                   right: 0 !important;
                   bottom: 0 !important;
+                }
+
+                .capture-footer-zone {
+                  position: relative !important;
+                  min-height: 132px !important;
+                  margin-top: 16px !important;
+                  padding: 18px 130px 8px !important;
+                }
+
+                .rabbit-review-banner {
+                  position: relative !important;
+                  margin-top: 0 !important;
+                  max-width: 600px !important;
+                  min-height: 74px !important;
+                  border-color: #f7cfdf !important;
+                  border-radius: 18px !important;
+                  background: rgba(255, 255, 255, 0.82) !important;
+                  box-shadow: 0 8px 18px rgba(190, 82, 126, 0.12) !important;
+                }
+
+                .rabbit-review-banner > img {
+                  display: none !important;
+                }
+
+                .rabbit-review-banner::before {
+                  content: '♥';
+                  position: absolute;
+                  left: 50%;
+                  top: -15px;
+                  transform: translateX(-50%);
+                  color: #f5a8c4;
+                  font-size: 22px;
+                  line-height: 1;
+                  text-shadow: 0 2px 4px rgba(190, 82, 126, 0.12);
                 }
                
                ::-webkit-scrollbar { display: none; }
@@ -414,7 +462,7 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
                 className="block h-auto w-full object-contain"
               />
             </div>
-            <div className="overflow-x-auto rabbit-scroll">
+            <div className="capture-table-shell overflow-x-auto rabbit-scroll">
               <div className="inline-block min-w-full align-middle p-2 md:p-4">
               <table className={`min-w-full border-collapse rounded-xl overflow-hidden shadow-sm border ${tableBorder}`}>
                 <thead>
@@ -448,7 +496,7 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
               </table>
               </div>
             </div>
-            <div className="px-2 pb-2 md:px-4 md:pb-4">
+            <div className="capture-footer-zone px-2 pb-2 md:px-4 md:pb-4">
               <div className="rabbit-review-banner mx-auto mt-4 flex max-w-2xl items-center justify-center gap-3 rounded-xl border border-pink-100 bg-pink-50/70 px-4 py-2.5 text-center shadow-sm">
                 <img src={RABBIT_REVIEW_IMAGE} alt="粉粉兔與冰冰共同檢視" className="h-14 w-20 shrink-0 object-contain" />
                 <div className="text-center">
