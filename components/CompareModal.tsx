@@ -321,7 +321,7 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
                   vertical-align: top !important;
                   white-space: normal !important;
                   /* 確保字型一致 */
-                  font-family: 'Noto Sans TC', sans-serif !important;
+                  font-family: 'jf-openhuninn', sans-serif !important;
                }
 
                /* 一般文字容器修正 */
@@ -366,8 +366,8 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
             <div className={`rabbit-pk-header relative min-h-[116px] overflow-hidden border-b px-5 py-5 md:px-8 ${headerBg}`}>
               <div className="relative z-10 flex h-full items-center justify-center text-center">
                 <div>
-                  <div className="mb-1 inline-flex items-center gap-1.5 rounded-full border border-pink-200 bg-white/90 px-3 py-1 text-[10px] font-black text-pink-500 shadow-sm">
-                    <Sparkles size={13} /> 粉粉兔陪你挑好房
+                  <div className="mb-1 inline-flex items-center gap-1.5 rounded-full border border-pink-200 bg-white/90 px-3 py-1.5 text-sm font-black text-pink-500 shadow-sm">
+                    <Sparkles size={16} /> @threads_看房粉粉兔
                   </div>
                   <h2 className={`text-xl md:text-2xl font-black ${textMain}`}>粉粉兔殘酷擂台</h2>
                   <p className={`text-xs ${accentText} font-black tracking-[0.22em]`}>PK SYSTEM</p>
@@ -419,7 +419,7 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose, projects, 
                 <div>
                   <p className="text-[11px] font-black text-stone-700">粉粉兔與冰冰的看房提醒</p>
                   <p className={`text-[10px] ${textMuted} font-bold leading-relaxed`}>
-                    分數是比較起點，不是唯一答案；分數偏低但價格更甜，也可能很合理。
+                    分數不代表絕對，分數低但價格也較低=合理
                   </p>
                 </div>
               </div>

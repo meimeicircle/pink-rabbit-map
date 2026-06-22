@@ -1,9 +1,27 @@
 
 /* Custom Styles */
+@font-face {
+  font-family: 'jf-openhuninn';
+  src: url('/fonts/jf-openhuninn-2.1.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 body {
-  font-family: 'Noto Sans TC', sans-serif;
+  font-family: 'jf-openhuninn', sans-serif;
   background-color: #fff0f5;
   overscroll-behavior-y: none;
+}
+
+button,
+input,
+select,
+textarea,
+.leaflet-container,
+.leaflet-tooltip,
+.leaflet-popup-content {
+  font-family: 'jf-openhuninn', sans-serif;
 }
 
 .rabbit-scroll::-webkit-scrollbar {
@@ -83,7 +101,7 @@ body {
   border-radius: 10px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   padding: 0;
-  font-family: 'Noto Sans TC', sans-serif;
+  font-family: 'jf-openhuninn', sans-serif;
 }
 
 .rabbit-project-tooltip:before {

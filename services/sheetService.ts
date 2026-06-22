@@ -148,10 +148,10 @@ export const parsePasteData = (text: string): EstateProject[] => {
     
     // 新增標籤欄位
     trafficTags: findIndex(['交通標籤', 'Traffic']),
-    materialTextTags: findIndex(['建材標籤']), // 注意不要跟 Emoji 混淆，parser 會找包含字串，這裡假設 Emoji 標籤已經被上面的 materialEmojiTags 抓走(如果順序正確) 或者需要更精確
-    viewTags: findIndex(['景觀標籤', 'View']),
-    waterproofTags: findIndex(['防水標籤', 'Waterproof']),
-    floorHeightTags: findIndex(['樓高標籤', 'Height']),
+    materialTextTags: findIndex(['建材標籤', '建材等級']),
+    viewTags: findIndex(['景觀標籤', '校園公園景觀', 'View']),
+    waterproofTags: findIndex(['防水標籤', '防水保固標籤', 'Waterproof']),
+    floorHeightTags: findIndex(['樓高標籤', '樓高特色', 'Height']),
 
     // 其他欄位
     address: findIndex(['地址', 'Address']),
