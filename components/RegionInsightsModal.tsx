@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { ArrowLeft, BarChart3, Building2, Crown, Layers3, MapPin, Search, Sparkles, Swords, Tags, TrendingUp, Users, X } from 'lucide-react';
+import { ArrowLeft, BarChart3, Building2, Crown, Layers3, MapPin, Search, Swords, Tags, TrendingUp, Users, X } from 'lucide-react';
 import { EstateProject } from '../types';
 import type { ThemeColor } from '../App';
 import { TextWithFluentEmojis } from '../utils/fluentEmoji';
@@ -24,9 +24,11 @@ interface RegionInsight {
   avgBaseArea: number;
   avgUnits: number;
   topMaterials: string[];
-  topSellingPoints: string[];
   projects: EstateProject[];
 }
+
+const SCORE_BASELINE = 70;
+const SCORE_MAX = 100;
 
 const parseNumber = (value?: string): number | null => {
   if (!value) return null;
@@ -40,14 +42,6 @@ const splitTags = (value?: string): string[] => {
     .split(/[|,，、\n]/)
     .map(tag => tag.trim())
     .filter(Boolean);
-};
-
-const splitSellingPoints = (value?: string): string[] => {
-  if (!value) return [];
-  return value
-    .split(/(?:\d+[\.\)]\s*|[|,，、\n]+)/)
-    .map(item => item.trim())
-    .filter(item => item.length >= 3);
 };
 
 const average = (values: Array<number | null>): number => {
@@ -72,6 +66,13 @@ const formatNumber = (value: number, digits = 0): string => {
     minimumFractionDigits: digits,
   });
 };
+
+const getProjectFacts = (project: EstateProject) => [
+  { label: '坪數', value: project.mainSquareFootage || '-' },
+  { label: '戶數', value: project.totalUnits ? `${project.totalUnits}戶` : '-' },
+  { label: '公設', value: project.publicRatio || '-' },
+  { label: '基地', value: project.baseArea ? `${project.baseArea}坪` : '-' },
+];
 
 const getThemeClasses = (themeColor: ThemeColor) => {
   if (themeColor === 'dark') {
@@ -174,7 +175,6 @@ const RegionInsightsModal: React.FC<RegionInsightsModalProps> = ({
           avgBaseArea: average(regionProjects.map(project => parseNumber(project.baseArea))),
           avgUnits: average(regionProjects.map(project => parseNumber(project.totalUnits))),
           topMaterials: topItems(regionProjects.flatMap(project => splitTags(project.materialTags)), 6),
-          topSellingPoints: topItems(regionProjects.flatMap(project => splitSellingPoints(project.sellingPoint)), 4),
           projects: sortedProjects,
         };
       })
@@ -188,7 +188,6 @@ const RegionInsightsModal: React.FC<RegionInsightsModalProps> = ({
     return insights.filter(item => [
       item.region,
       ...item.topMaterials,
-      ...item.topSellingPoints,
       ...item.projects.map(project => project.name),
     ].join(' ').toLowerCase().includes(normalizedQuery));
   }, [insights, query]);
@@ -223,7 +222,7 @@ const RegionInsightsModal: React.FC<RegionInsightsModalProps> = ({
                 {selectedInsight ? `${selectedInsight.region} 分數分布` : '粉粉兔區域情報站'}
               </h2>
               <p className={`text-sm font-bold mt-1 ${theme.muted}`}>
-                {selectedInsight ? '點直式柱狀圖可以直接開建案，也可以把建案加進 PK。' : '先選區域，再看這區建案的分數柱狀圖。'}
+                {selectedInsight ? '以 70 分為基準看差距，點柱子可以直接開建案。' : '先選區域，再看這區建案的分數柱狀圖。'}
               </p>
             </div>
             <button onClick={onClose} className={`p-2 rounded-full transition-colors ${themeColor === 'dark' ? 'hover:bg-night-700 text-night-300' : 'hover:bg-white text-stone-400 hover:text-stone-600'}`}>
@@ -248,7 +247,7 @@ const RegionInsightsModal: React.FC<RegionInsightsModalProps> = ({
               <input
                 value={query}
                 onChange={event => setQuery(event.target.value)}
-                placeholder="搜尋區域、建材、訴求..."
+                placeholder="搜尋區域、建材、建案..."
                 className={`w-full bg-transparent outline-none text-sm font-bold ${theme.text} placeholder:text-stone-300`}
               />
             </label>
@@ -335,10 +334,6 @@ const RegionCard: React.FC<{ insight: RegionInsight; onOpen: () => void; theme: 
       </div>
     )}
 
-    {insight.topSellingPoints.length > 0 && (
-      <TagSection icon={<Sparkles size={14} />} title="常見訴求" items={insight.topSellingPoints} theme={theme} />
-    )}
-
     {insight.topMaterials.length > 0 && (
       <TagSection icon={<Tags size={14} />} title="常見建材" items={insight.topMaterials} theme={theme} />
     )}
@@ -355,7 +350,7 @@ const RegionDetail: React.FC<{
   onRemoveFromCompare: (id: string) => void;
   theme: ReturnType<typeof getThemeClasses>;
 }> = ({ insight, compareList, onBack, onSelectRegion, onSelectProject, onAddToCompare, onRemoveFromCompare, theme }) => {
-  const maxScore = Math.max(...insight.projects.map(project => project.score || 0), 100);
+  const scoreRange = SCORE_MAX - SCORE_BASELINE;
 
   return (
     <div className="space-y-4">
@@ -380,19 +375,19 @@ const RegionDetail: React.FC<{
         <div className="flex items-center justify-between gap-3 mb-4">
           <div>
             <h3 className={`text-xl font-black ${theme.text}`}>{insight.region} 建案分數圖</h3>
-            <p className={`text-xs font-bold mt-1 ${theme.muted}`}>點柱子或建案名稱可直接開啟建案詳情</p>
+            <p className={`text-xs font-bold mt-1 ${theme.muted}`}>70 分為基準線，越高代表比基準多出的分數越多</p>
           </div>
           <div className={`rounded-2xl px-3 py-2 text-sm font-black ${theme.chip}`}>{insight.count} 案</div>
         </div>
 
         <div className={`rounded-[1.25rem] border p-4 ${theme.chartBg}`}>
           <div className="relative overflow-x-auto rabbit-scroll pb-2">
-            <div className="relative h-[300px] min-w-max">
+            <div className="relative h-[320px] min-w-max">
               <div className="absolute inset-x-0 top-8 bottom-16 flex flex-col justify-between pointer-events-none">
-                {[100, 75, 50, 25].map(mark => (
+                {[100, 90, 80, 70].map(mark => (
                   <div key={mark} className="flex items-center gap-2">
                     <span className={`w-8 text-[10px] font-black text-right ${theme.muted}`}>{mark}</span>
-                    <span className={`h-px flex-1 ${theme.grid}`}></span>
+                    <span className={`h-px flex-1 ${mark === SCORE_BASELINE ? theme.accentBg : theme.grid}`}></span>
                   </div>
                 ))}
               </div>
@@ -400,13 +395,14 @@ const RegionDetail: React.FC<{
               <div className="relative z-10 flex h-full min-w-max items-end gap-4 px-2 pt-8 pb-2">
                 {insight.projects.map(project => {
                   const score = project.score || 0;
-                  const barHeight = `${Math.max(8, Math.min(100, (score / maxScore) * 100))}%`;
+                  const normalizedScore = Math.max(SCORE_BASELINE, Math.min(SCORE_MAX, score));
+                  const barHeight = `${Math.max(3, ((normalizedScore - SCORE_BASELINE) / scoreRange) * 100)}%`;
 
                   return (
                     <div key={project.id} className="flex h-full w-24 shrink-0 flex-col items-center justify-end">
                       <button
                         onClick={() => onSelectProject(project.id)}
-                        className="group flex h-[210px] w-full items-end justify-center px-2"
+                        className="group flex h-[220px] w-full items-end justify-center px-2"
                         title={`開啟 ${project.name}`}
                       >
                         <span
@@ -448,9 +444,7 @@ const RegionDetail: React.FC<{
                   </button>
                   <div className={`shrink-0 text-lg font-black ${score >= 90 ? theme.accent : theme.muted}`}>{score || '-'}分</div>
                 </div>
-                <div className={`mt-1 text-xs font-bold ${theme.muted}`}>
-                  {project.publicRatio || '公設未填'} · {project.baseArea ? `${project.baseArea}坪` : '基地未填'}
-                </div>
+                <ProjectFacts project={project} theme={theme} />
                 <div className="mt-3 flex flex-wrap gap-2">
                   <button
                     onClick={() => onSelectProject(project.id)}
@@ -474,6 +468,17 @@ const RegionDetail: React.FC<{
     </div>
   );
 };
+
+const ProjectFacts: React.FC<{ project: EstateProject; theme: ReturnType<typeof getThemeClasses> }> = ({ project, theme }) => (
+  <div className="mt-2 grid grid-cols-2 gap-1.5">
+    {getProjectFacts(project).map(item => (
+      <div key={item.label} className={`rounded-xl border px-2 py-1.5 ${theme.chip}`}>
+        <div className={`text-[10px] font-black ${theme.muted}`}>{item.label}</div>
+        <div className={`text-xs font-black leading-tight ${theme.text}`}>{item.value}</div>
+      </div>
+    ))}
+  </div>
+);
 
 const Metric: React.FC<{ icon: React.ReactNode; label: string; value: string; theme: ReturnType<typeof getThemeClasses> }> = ({ icon, label, value, theme }) => (
   <div className={`rounded-2xl border p-3 ${theme.softCard}`}>
