@@ -89,6 +89,8 @@ const getThemeClasses = (themeColor: ThemeColor) => {
       button: 'bg-night-pink-primary text-white hover:bg-night-pink-secondary',
       ghostButton: 'bg-night-700 text-night-200 border-night-600 hover:bg-night-600',
       bar: 'from-night-pink-primary to-night-pink-secondary',
+      grid: 'bg-night-600',
+      chartBg: 'bg-night-800 border-night-700',
     };
   }
 
@@ -106,7 +108,9 @@ const getThemeClasses = (themeColor: ThemeColor) => {
       chip: 'bg-sky-50 border-sky-100 text-sky-600',
       button: 'bg-sky-500 text-white hover:bg-sky-600',
       ghostButton: 'bg-white text-sky-600 border-sky-100 hover:bg-sky-50',
-      bar: 'from-sky-400 to-sky-500',
+      bar: 'from-sky-300 to-sky-500',
+      grid: 'bg-sky-100',
+      chartBg: 'bg-white border-sky-100',
     };
   }
 
@@ -124,6 +128,8 @@ const getThemeClasses = (themeColor: ThemeColor) => {
     button: 'bg-pink-500 text-white hover:bg-pink-600',
     ghostButton: 'bg-white text-pink-600 border-pink-100 hover:bg-pink-50',
     bar: 'from-pink-300 to-pink-500',
+    grid: 'bg-pink-100',
+    chartBg: 'bg-white border-pink-100',
   };
 };
 
@@ -217,7 +223,7 @@ const RegionInsightsModal: React.FC<RegionInsightsModalProps> = ({
                 {selectedInsight ? `${selectedInsight.region} 分數分布` : '粉粉兔區域情報站'}
               </h2>
               <p className={`text-sm font-bold mt-1 ${theme.muted}`}>
-                {selectedInsight ? '點柱狀圖可以直接開建案，也可以把建案加進 PK。' : '先選區域，再看這區建案的分數柱狀圖。'}
+                {selectedInsight ? '點直式柱狀圖可以直接開建案，也可以把建案加進 PK。' : '先選區域，再看這區建案的分數柱狀圖。'}
               </p>
             </div>
             <button onClick={onClose} className={`p-2 rounded-full transition-colors ${themeColor === 'dark' ? 'hover:bg-night-700 text-night-300' : 'hover:bg-white text-stone-400 hover:text-stone-600'}`}>
@@ -374,20 +380,66 @@ const RegionDetail: React.FC<{
         <div className="flex items-center justify-between gap-3 mb-4">
           <div>
             <h3 className={`text-xl font-black ${theme.text}`}>{insight.region} 建案分數圖</h3>
-            <p className={`text-xs font-bold mt-1 ${theme.muted}`}>點柱狀圖或建案名稱可直接開啟建案詳情</p>
+            <p className={`text-xs font-bold mt-1 ${theme.muted}`}>點柱子或建案名稱可直接開啟建案詳情</p>
           </div>
           <div className={`rounded-2xl px-3 py-2 text-sm font-black ${theme.chip}`}>{insight.count} 案</div>
         </div>
 
-        <div className="space-y-3">
+        <div className={`rounded-[1.25rem] border p-4 ${theme.chartBg}`}>
+          <div className="relative overflow-x-auto rabbit-scroll pb-2">
+            <div className="relative h-[300px] min-w-max">
+              <div className="absolute inset-x-0 top-8 bottom-16 flex flex-col justify-between pointer-events-none">
+                {[100, 75, 50, 25].map(mark => (
+                  <div key={mark} className="flex items-center gap-2">
+                    <span className={`w-8 text-[10px] font-black text-right ${theme.muted}`}>{mark}</span>
+                    <span className={`h-px flex-1 ${theme.grid}`}></span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="relative z-10 flex h-full min-w-max items-end gap-4 px-2 pt-8 pb-2">
+                {insight.projects.map(project => {
+                  const score = project.score || 0;
+                  const barHeight = `${Math.max(8, Math.min(100, (score / maxScore) * 100))}%`;
+
+                  return (
+                    <div key={project.id} className="flex h-full w-24 shrink-0 flex-col items-center justify-end">
+                      <button
+                        onClick={() => onSelectProject(project.id)}
+                        className="group flex h-[210px] w-full items-end justify-center px-2"
+                        title={`開啟 ${project.name}`}
+                      >
+                        <span
+                          className={`relative block w-12 rounded-t-2xl bg-gradient-to-t ${theme.bar} shadow-lg transition-all group-hover:brightness-105 group-active:scale-95`}
+                          style={{ height: barHeight }}
+                        >
+                          <span className={`absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap text-sm font-black ${score >= 90 ? theme.accent : theme.text}`}>
+                            {score || '-'}分
+                          </span>
+                        </span>
+                      </button>
+                      <button
+                        onClick={() => onSelectProject(project.id)}
+                        className={`mt-2 h-10 w-full overflow-hidden text-center text-xs font-black leading-tight ${theme.text} hover:underline`}
+                      >
+                        <TextWithFluentEmojis text={project.name} emojiSize={13} />
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
           {insight.projects.map(project => {
             const score = project.score || 0;
             const isInCompare = compareList.some(item => item.id === project.id);
-            const width = `${Math.max(8, Math.min(100, (score / maxScore) * 100))}%`;
 
             return (
               <div key={project.id} className={`rounded-2xl border p-3 ${theme.softCard}`}>
-                <div className="flex items-center justify-between gap-3 mb-2">
+                <div className="flex items-start justify-between gap-3">
                   <button
                     onClick={() => onSelectProject(project.id)}
                     className={`min-w-0 text-left font-black ${theme.text} hover:underline`}
@@ -396,18 +448,9 @@ const RegionDetail: React.FC<{
                   </button>
                   <div className={`shrink-0 text-lg font-black ${score >= 90 ? theme.accent : theme.muted}`}>{score || '-'}分</div>
                 </div>
-
-                <button
-                  onClick={() => onSelectProject(project.id)}
-                  className={`relative h-8 w-full overflow-hidden rounded-full border ${themeColorBorder(theme)} bg-white/70 text-left`}
-                  title={`開啟 ${project.name}`}
-                >
-                  <span className={`absolute inset-y-0 left-0 rounded-full bg-gradient-to-r ${theme.bar}`} style={{ width }}></span>
-                  <span className={`relative z-10 flex h-full items-center px-3 text-xs font-black ${score >= 70 ? 'text-white' : theme.text}`}>
-                    {project.region} · {project.publicRatio || '公設未填'} · {project.baseArea ? `${project.baseArea}坪` : '基地未填'}
-                  </span>
-                </button>
-
+                <div className={`mt-1 text-xs font-bold ${theme.muted}`}>
+                  {project.publicRatio || '公設未填'} · {project.baseArea ? `${project.baseArea}坪` : '基地未填'}
+                </div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   <button
                     onClick={() => onSelectProject(project.id)}
@@ -430,12 +473,6 @@ const RegionDetail: React.FC<{
       </div>
     </div>
   );
-};
-
-const themeColorBorder = (theme: ReturnType<typeof getThemeClasses>) => {
-  if (theme.accent.includes('sky')) return 'border-sky-100';
-  if (theme.accent.includes('night')) return 'border-night-600';
-  return 'border-pink-100';
 };
 
 const Metric: React.FC<{ icon: React.ReactNode; label: string; value: string; theme: ReturnType<typeof getThemeClasses> }> = ({ icon, label, value, theme }) => (
