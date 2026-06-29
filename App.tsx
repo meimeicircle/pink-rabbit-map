@@ -424,6 +424,12 @@ const App: React.FC = () => {
     setIsWelcomeOpen(false);
   };
 
+  const handleSelectInsightProject = (id: string) => {
+    setIsRegionInsightsOpen(false);
+    setIsWelcomeOpen(false);
+    handleProjectSelect(id);
+  };
+
   const ntpCount = useMemo(() => allProjects.filter(p => NTP_KEYWORDS.some(k => p.region.includes(k))).length, [allProjects]);
   const tyCount = useMemo(() => allProjects.filter(p => TY_KEYWORDS.some(k => p.region.includes(k))).length, [allProjects]);
   const hcCount = useMemo(() => allProjects.filter(p => HC_KEYWORDS.some(k => p.region.includes(k))).length, [allProjects]);
@@ -1041,7 +1047,11 @@ const App: React.FC = () => {
         isOpen={isRegionInsightsOpen}
         onClose={() => setIsRegionInsightsOpen(false)}
         projects={allProjects}
+        compareList={compareList}
         onSelectRegion={handleSelectInsightRegion}
+        onSelectProject={handleSelectInsightProject}
+        onAddToCompare={handleAddToCompare}
+        onRemoveFromCompare={handleRemoveFromCompare}
         themeColor={theme}
       />
 
