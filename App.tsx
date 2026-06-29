@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { Search, Filter, PlusCircle, X, Map as MapIcon, List as ListIcon, FileText, TrainFront, BookOpen, ChevronDown, ChevronUp, Tag, Trash2, MapPin, Check, ArrowLeft, ArrowRight, Palette, SlidersHorizontal, Plus, CheckSquare, MessageCircle } from 'lucide-react';
+import { Search, Filter, PlusCircle, X, Map as MapIcon, List as ListIcon, FileText, TrainFront, BookOpen, ChevronDown, ChevronUp, Tag, Trash2, MapPin, Check, ArrowLeft, ArrowRight, Palette, SlidersHorizontal, Plus, CheckSquare, MessageCircle, BarChart3 } from 'lucide-react';
 import { EstateProject, FilterState, RabbitVerdict } from './types';
 import { fetchProjects } from './services/sheetService';
 import RabbitMap from './components/RabbitMap';
@@ -12,6 +12,7 @@ import AskRabbitModal from './components/AskRabbitModal';
 import GuideModal from './components/GuideModal';
 import SubmitProjectModal from './components/SubmitProjectModal';
 import InstallPwaPrompt from './components/InstallPwaPrompt';
+import RegionInsightsModal from './components/RegionInsightsModal';
 import { APP_TITLE, RABBIT_AVATAR_URL, SUNGLASSES_URL, MAP_3D_URL, ICON_DESKTOP_APP, ICON_MOBILE_APP, ICON_DESKTOP_WEB, ICON_MOBILE_WEB } from './constants';
 import { FluentEmoji, TextWithFluentEmojis } from './utils/fluentEmoji';
 
@@ -38,6 +39,7 @@ const App: React.FC = () => {
   const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
   const [isAskModalOpen, setIsAskModalOpen] = useState(false);
   const [isGuideOpen, setIsGuideOpen] = useState(false);
+  const [isRegionInsightsOpen, setIsRegionInsightsOpen] = useState(false);
 
   // Welcome Modal State
   const [isWelcomeOpen, setIsWelcomeOpen] = useState(true);
@@ -105,11 +107,12 @@ const App: React.FC = () => {
       if (isSubmitOpen) setIsSubmitOpen(false);
       if (isAskModalOpen) setIsAskModalOpen(false);
       if (isGuideOpen) setIsGuideOpen(false);
+      if (isRegionInsightsOpen) setIsRegionInsightsOpen(false);
       if (isFilterModalOpen) setIsFilterModalOpen(false);
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, [selectedId, isCompareModalOpen, isSubmitOpen, isAskModalOpen, isGuideOpen, isFilterModalOpen]);
+  }, [selectedId, isCompareModalOpen, isSubmitOpen, isAskModalOpen, isGuideOpen, isRegionInsightsOpen, isFilterModalOpen]);
 
   // 🏗️ Grouped Regions Logic
   const groupedRegions = useMemo(() => {
@@ -411,6 +414,16 @@ const App: React.FC = () => {
     setIsFilterModalOpen(false);
   };
 
+  const handleSelectInsightRegion = (region: string) => {
+    setProjects(allProjects);
+    setActiveFilterRegions([]);
+    setFilters(prev => ({ ...prev, region }));
+    setSelectedId(null);
+    setMobileView('list');
+    setIsRegionInsightsOpen(false);
+    setIsWelcomeOpen(false);
+  };
+
   const ntpCount = useMemo(() => allProjects.filter(p => NTP_KEYWORDS.some(k => p.region.includes(k))).length, [allProjects]);
   const tyCount = useMemo(() => allProjects.filter(p => TY_KEYWORDS.some(k => p.region.includes(k))).length, [allProjects]);
   const hcCount = useMemo(() => allProjects.filter(p => HC_KEYWORDS.some(k => p.region.includes(k))).length, [allProjects]);
@@ -669,6 +682,14 @@ const App: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2 md:gap-3 relative">
+          <button 
+            onClick={() => setIsRegionInsightsOpen(true)}
+            className={`flex items-center gap-2 border-2 ${theme === 'pink' ? 'bg-white border-pink-200 text-pink-500 hover:bg-pink-50' : theme === 'sky' ? 'bg-white border-sky-200 text-sky-500 hover:bg-sky-50' : 'bg-white border-[#728A7A] text-[#728A7A] hover:bg-[#728A7A]/10'} px-3 py-1.5 md:px-4 md:py-2 rounded-2xl font-bold text-sm transition-all shadow-sm shrink-0`}
+          >
+            <BarChart3 size={18} />
+            <span className="hidden md:inline">區域情報</span>
+          </button>
+
           <button 
             onClick={() => setIsSubmitOpen(true)}
             className={`flex items-center gap-2 border-2 ${theme === 'pink' ? 'bg-white border-pink-200 text-pink-500 hover:bg-pink-50' : theme === 'sky' ? 'bg-white border-sky-200 text-sky-500 hover:bg-sky-50' : 'bg-white border-[#728A7A] text-[#728A7A] hover:bg-[#728A7A]/10'} px-3 py-1.5 md:px-4 md:py-2 rounded-2xl font-bold text-sm transition-all shadow-sm shrink-0`}
@@ -939,7 +960,7 @@ const App: React.FC = () => {
            </div>
         </div>
 
-        {!isCompareModalOpen && !isSubmitOpen && !isAskModalOpen && !isGuideOpen && !selectedId && !isWelcomeOpen && (
+        {!isCompareModalOpen && !isSubmitOpen && !isAskModalOpen && !isGuideOpen && !isRegionInsightsOpen && !selectedId && !isWelcomeOpen && (
           <div className="md:hidden fixed bottom-8 left-1/2 transform -translate-x-1/2 z-[1000] pb-[env(safe-area-inset-bottom)]">
              <button 
                onClick={() => setMobileView(mobileView === 'list' ? 'map' : 'list')}
@@ -954,7 +975,7 @@ const App: React.FC = () => {
           </div>
         )}
 
-        {!isWelcomeOpen && !selectedId && !isCompareModalOpen && (
+        {!isWelcomeOpen && !selectedId && !isCompareModalOpen && !isRegionInsightsOpen && (
           <div className="fixed bottom-24 right-4 md:right-8 z-[1400] flex flex-col gap-3 pb-[env(safe-area-inset-bottom)]">
              <button 
                onClick={toggleTheme}
@@ -1013,6 +1034,14 @@ const App: React.FC = () => {
       <AskRabbitModal 
         isOpen={isAskModalOpen} 
         onClose={() => setIsAskModalOpen(false)} 
+        themeColor={theme}
+      />
+
+      <RegionInsightsModal
+        isOpen={isRegionInsightsOpen}
+        onClose={() => setIsRegionInsightsOpen(false)}
+        projects={allProjects}
+        onSelectRegion={handleSelectInsightRegion}
         themeColor={theme}
       />
 
