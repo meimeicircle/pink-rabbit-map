@@ -145,8 +145,8 @@ const RabbitMap: React.FC<RabbitMapProps> = ({
         <TileLayer 
           key={themeColor} /* FORCE RE-RENDER ON THEME CHANGE */
           /* Removed 'rabbit-map-tiles-dark' class to prevent black inverted map */
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' 
-          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+          url="https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=cb1_31t5_1_da9a51a59d4f4ea9f8ab44a8"
           maxZoom={19}
         />
         <MapResizer layoutTrigger={mobileView} />
